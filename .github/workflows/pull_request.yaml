@@ -1,0 +1,13 @@
+name: push-workflow
+on: pull_request
+
+jobs:
+  pull-request-job: #push-job이라는 job을 만듬
+    runs-on: ubuntu-latest  #이 push-job이 우분투 머신에서 실행된다는 의미
+    steps:
+      - name: step1
+        run: echo hello world
+      - name: step2
+        run: |
+          echo hello world
+          echo github action
