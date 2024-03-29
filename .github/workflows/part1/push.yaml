@@ -1,0 +1,18 @@
+name: push-workflow
+on: push
+
+jobs:
+    push-job:
+        runs-on: ubuntu-latest
+        steps:
+            - name: step1
+              run: echo heool world
+            - name: step2
+              run: echo hellow world2
+            - name: step3
+              run: 
+                echo hellow world 3 
+                echo hellow world 4
+
+
+
