@@ -1,7 +1,7 @@
 name: push-workflow
 on: push
 
- jobs:
+jobs:
 	push-job:
 		runs-on: ubuntu-latest
 		steps:
