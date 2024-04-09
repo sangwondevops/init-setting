@@ -68,7 +68,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20' # 노드 버전을 프로젝트에 맞게 조정
+        node-version: '20' 
     - name: Install dependencies
       run: |
         npm install
@@ -98,20 +98,20 @@ jobs:
       if: always()
       uses: slackapi/slack-github-action@v1.24.0
       with:
-        payload: |
-          {
-            "text": "message",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Environment : dev, Deploy Result : ${{ steps.cdk_deploy.outcome }}, Repository : ${{ github.repository }}."
-                  # 수정된 참조: steps.cdk_deploy.outcome
+          payload: |
+            {
+              "text": "message",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Environment : dev, Deploy Result : failure, Repository : wonjin-action/github-actions."
+                  }
                 }
-              }
-            ]
-          }
+              ]
+            }
+
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
