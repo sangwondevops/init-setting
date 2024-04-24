@@ -3,7 +3,7 @@ on:
   issue:
   types: [opened]
 jobs:
-  push-job:
+  issue-job:
     runs-on: ubuntu-latest
     steps:
     - name: step1
