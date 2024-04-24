@@ -1,6 +1,6 @@
 name: issue-workflow
-  on:
-    issue:
+on:
+  issue:
     types: [opened]
 jobs:
   issue-job:
