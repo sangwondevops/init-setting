@@ -1,4 +1,4 @@
-name: pull-request-workflow
+name: pull-request-workflow-hello
 on:
   pull_request:
     types: [opened]
