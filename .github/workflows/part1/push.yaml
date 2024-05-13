@@ -1,4 +1,4 @@
-name: push-workflow
+name: push-workflow-hello
 on: push
 jobs:
   push-job:
