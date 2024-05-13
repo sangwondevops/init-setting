@@ -1,0 +1,12 @@
+name: path-filter
+on:
+  push:
+    paths:
+      - ".github/workflows/part1/*"
+
+jobs:
+  push-filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo "This is a push event with path filter"
