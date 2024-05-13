@@ -1,8 +1,8 @@
-name: pr-workflow
+name: pull-request-workflow
 on: pull_request
 
 jobs:
-  pr-job:
+  pull-request-job:
     runs-on: ubuntu-latest
     steps:
     - name: step1
