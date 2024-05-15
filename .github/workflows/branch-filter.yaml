@@ -2,7 +2,7 @@ name: branch-filter
 on:
   push:
     branches:
-      - dev
+      - dev-test
 
 jobs:
   branch-filter:
