@@ -1,0 +1,14 @@
+name: output
+on: push
+
+jobs:
+  create-output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo output
+        id: check-output
+        run: |
+          echo "test=hello" >> $GITHUB_OUTPUT
+      - name: check output
+        run: |
+          echo ${{ steps.check-output.outputs.test }}
