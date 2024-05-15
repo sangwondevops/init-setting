@@ -1,0 +1,28 @@
+name: create-repo
+on:
+  workflow_dispatch:
+    inputs:
+      prefix:
+        description: 'Prefix for the repository name'
+        required: true
+        default: 'service'
+        type: choice
+        options:
+          - 'service'
+          - 'example'
+      name:
+        description: 'Name of the repository'
+        required: true
+        default: 'my-repo'
+        type: string
+
+jobs:
+  create-repo-automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: gh auth login
+        run: |
+          gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
+      - name: create repo
+        run: |
+          gh repo create jaime-github-action/${{ inputs.prefix }}-${{ inputs.name }} --public --add-readme
