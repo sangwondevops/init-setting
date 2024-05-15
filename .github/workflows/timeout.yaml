@@ -1,0 +1,18 @@
+name: timeout
+on: push
+
+jobs:
+  timeout-job:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: step1
+        run: |
+          count=0
+          while true; do
+            echo "second: $count"
+            count=$((count+1))
+            sleep 1
+          done
+      - name: echo
+        run: echo "This is the end of the workflow"
