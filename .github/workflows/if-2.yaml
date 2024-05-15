@@ -12,6 +12,7 @@ jobs:
   job2:
     needs: job1
     runs-on: ubuntu-latest
+    if: always()
     steps:
       - name: echo
         run: echo hello
