@@ -1,0 +1,27 @@
+name: string-function
+on: push
+
+jobs:
+  string-function:
+    runs-on: ubuntu-latest
+    steps:
+      - name: startsWith
+        if: startsWith('hello', 'h')
+        run: echo hello
+      - name: startsWith
+        if: startsWith('hello', 'H')
+        run: echo hello
+
+      - name: endsWith
+        if: endsWith('hello', 'o')
+        run: echo hello
+      - name: endsWith
+        if: endsWith('hello', 'O')
+        run: echo hello
+
+      - name: contains
+        if: contains('hello', 'l')
+        run: echo hello
+      - name: contains
+        if: contains('hello', 'L')
+        run: echo hello
