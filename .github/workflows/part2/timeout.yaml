@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: step1
+      - name: loop
         timeout-minutes: 1
         run: |
           count=0
