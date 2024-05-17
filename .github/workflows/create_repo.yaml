@@ -31,11 +31,11 @@ jobs:
         id: set-color
         run: |
           if [ "${{ steps.create-repo.outcome }}" == "success" ]; then
-            echo "color=#36a64f" >> $GITHUB_ENV
+            echo "slack_color=#36a64f" >> $GITHUB_ENV
           else
-            echo "color=#FF0000" >> $GITHUB_ENV
+            echo "slack_color=#FF0000" >> $GITHUB_ENV
           fi
-      - name: Send custom JSON data to Slack workflow
+      - name: Slack message
         if: always()
         uses: slackapi/slack-github-action@v1.26.0
         with:
@@ -44,7 +44,7 @@ jobs:
             {
               "attachments": [{
                 "pretext": "A new repository has been created",
-                "color": "${{ env.color }}",
+                "color": "${{ env.slack_color }}",
                 "fields": [
                     {
                         "title": "Create repo result ${{ steps.create-repo.outcome }}",
