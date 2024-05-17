@@ -28,6 +28,7 @@ jobs:
         run: |
           gh repo create june-github-action-practice/${{ inputs.prefix }}-${{ inputs.name }} --public  --add-readme
       - name: Set color based on outcome
+        if: always()
         id: set-color
         run: |
           if [ "${{ steps.create-repo.outcome }}" == "success" ]; then
