@@ -23,7 +23,8 @@ jobs:
       - name: gh auth login
         run: |
           echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} | gh auth login --with-token
-      - name: create repo
+      - name: create-repo
+        id: create-repo
         run: |
           gh repo create june-github-action-practice/${{ inputs.prefix }}-${{ inputs.name }} --public  --add-readme
       - name: Send custom JSON data to Slack workflow
@@ -38,7 +39,7 @@ jobs:
                 "color": "#36a64f",
                 "fields": [
                     {
-                        "title": "Repository Name",
+                        "title": "Create repo result ${{ steps.create-repo.outcome }}",
                         "value": "${{ inputs.prefix }}-${{ inputs.name }}",
                         "short": true
                         }
