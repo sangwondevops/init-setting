@@ -26,3 +26,13 @@ jobs:
       - name: create repo
         run: |
           gh repo create june-github-action-practice/${{ inputs.prefix }}-${{ inputs.name }} --public  --add-readme
+
+  send-slack-message:
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send GitHub Action trigger data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
