@@ -22,12 +22,13 @@ jobs:
     steps:
       - name: gh auth login
         run: |
-          echo ${{ secrets.PERSONAL_ACCESS_TOKE }} | gh auth login --with-token
+          echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} | gh auth login --with-token
       - name: create repo
         run: |
           gh repo create june-github-action-practice/${{ inputs.prefix }}-${{ inputs.name }} --public  --add-readme
 
   send-slack-message:
+    needs: [create-repo-automation]
     runs-on: ubuntu-latest
     if: always()
     steps:
