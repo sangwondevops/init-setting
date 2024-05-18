@@ -16,7 +16,7 @@ function App() {
           rel="noopener noreferrer"
         >
           Learn GitHub Action cicd <br />
-          Let's go~
+          Let's go~~~
         </a>
       </header>
     </div>
