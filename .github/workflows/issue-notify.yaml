@@ -10,9 +10,9 @@ jobs:
     outputs:
       keyword: ${{ steps.get-keyword.outputs.level }}
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: get keyword
+      - name: Get keyword
         id: get-keyword
         run: |
           echo level=undefined >> $GITHUB_OUTPUT
@@ -23,5 +23,5 @@ jobs:
               echo level=$keyword >> $GITHUB_OUTPUT
             fi
           done
-      - name: get output
+      - name: Get output
         run: echo ${{ steps.get-keyword.outputs.level }}
