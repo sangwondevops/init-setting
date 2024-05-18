@@ -40,11 +40,8 @@ jobs:
             {
               "attachments": [
                 {
-                  "color": "#36a64f",
-                  "pretext": "New issue opened",
-                  "title": "${{ github.event.issue.title }}",
-                  "title_link": "${{ github.event.issue.html_url }}",
-                  "text": "${{ github.event.issue.body }}",
+                  "pretext": "Issue alert message",
+                  "color": "28a745",
                   "fields": [
                     {
                       "title": "Level: ${{ needs.get-keyword.outputs.level }}",
