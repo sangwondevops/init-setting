@@ -1,0 +1,27 @@
+name: cicd-1
+on:
+  pull_request:
+    types: [ opened, synchronize, closed ]
+    branches: [ dev ]
+    paths: [ 'my-app/**' ]
+jobs:
+  test:
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+  image-build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+  deploy:
+    needs: [ image-build ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
