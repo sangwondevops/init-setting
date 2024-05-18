@@ -25,3 +25,36 @@ jobs:
           done
       - name: Get output
         run: echo ${{ steps.get-keyword.outputs.level }}
+
+  slack:
+    needs:
+      - get-keyword
+    if: needs.get-keyword.outputs.level != 'undefined'
+    runs-on: ubuntu-latest
+    environment: ${{ needs.get-keyword.outputs.level }}
+    steps:
+      - name: Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#36a64f",
+                  "pretext": "New issue opened",
+                  "title": "${{ github.event.issue.title }}",
+                  "title_link": "${{ github.event.issue.html_url }}",
+                  "text": "${{ github.event.issue.body }}",
+                  "fields": [
+                    {
+                      "title": "Level: ${{ needs.get-keyword.outputs.level }}",
+                      "short": true,
+                      "value": "Issue url: ${{ github.event.issue.html_url }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
