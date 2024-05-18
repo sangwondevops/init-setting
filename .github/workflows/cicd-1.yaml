@@ -1,10 +1,10 @@
-name: cick-1
+name: cicd-1
 on:
   pull_request:
     types: [opened, synchronize, closed]
     branches: [dev]
     paths:
-      - "may-app/**"
+      - "my-app/**"
 jobs:
   test:
     if: github.event.action == 'opened' || github.event.action == 'synchronize'
