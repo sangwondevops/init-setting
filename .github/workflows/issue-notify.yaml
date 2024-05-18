@@ -40,8 +40,8 @@ jobs:
             {
               "attachments": [
                 {
+                  "color": "#28a745",
                   "pretext": "Issue alert message",
-                  "color": "28a745",
                   "fields": [
                     {
                       "title": "Level: ${{ needs.get-keyword.outputs.level }}",
@@ -54,4 +54,5 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
