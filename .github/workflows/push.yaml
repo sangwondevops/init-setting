@@ -7,6 +7,5 @@ jobs:
     steps:
     - name: step1
       run: echo hello world
-    steps:
     - name: step2
       run: echo hello world2
