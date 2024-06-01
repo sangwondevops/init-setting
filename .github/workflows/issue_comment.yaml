@@ -1,5 +1,5 @@
 name: issue-comment-test
-on: issue-comment
+on: issue_comment
 
 jobs:
   pr-comment:
