@@ -1,6 +1,6 @@
 name: issue-workflow-test
 on:
-  issue:
+  issues:
     types: [opened]
   
   jobs:
