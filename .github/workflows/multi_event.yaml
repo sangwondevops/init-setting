@@ -1,7 +1,7 @@
 name: multi-event
 on: 
   push:
-  issue:
+  issues:
     types: [opened]
   workflow_dispatch:
 
