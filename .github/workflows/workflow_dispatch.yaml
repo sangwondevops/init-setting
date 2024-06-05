@@ -25,5 +25,5 @@ jobs:
         run: echo hello
       - name: step2
         run: |
-        echo ${{ inputs.name }}
-        echo ${{ inputs.env }}
+          echo ${{ inputs.name }}
+          echo ${{ inputs.env }}
