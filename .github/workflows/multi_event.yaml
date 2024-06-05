@@ -1,0 +1,13 @@
+name: multi-event
+on: 
+  push:
+  issue:
+    types: [opened]
+  workflow_dispatch:
+
+jobs:
+  one-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo hi
