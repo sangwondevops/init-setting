@@ -11,7 +11,7 @@ jobs:
           count=0
           while true; do
             echo "$count seconds"
-            count=$((count))
+            count=$((count+1))
             sleep 1
           done
       - name: echo
