@@ -7,6 +7,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: loop
+        timeout-minutes: 1
         run: |
           count=0
           while true; do
