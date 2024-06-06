@@ -1,4 +1,4 @@
-name: needs
+name: needs-work-flows
 on: push
 
 jobs:
