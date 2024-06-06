@@ -8,10 +8,10 @@ jobs:
     steps:
       - name: loop
         run: |
-          count = 0
+          count=0
           while true; do
             echo '$count seconds'
-            count $((count))
+            count=$((count))
             sleep 1
           done
       - name: echo
