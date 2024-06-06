@@ -1,0 +1,12 @@
+name: tag_ftiler
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  echo-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo hello
