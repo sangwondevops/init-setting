@@ -28,4 +28,4 @@ jobs:
       - name: npm build
         run: |
           cd my-app
-          npm build
+          npm run build
