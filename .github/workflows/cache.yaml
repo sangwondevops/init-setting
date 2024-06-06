@@ -22,10 +22,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: install dependencies
-        uses: |
+        runs: |
           cd my-app
           npm ci
       - name: npm build
-        uses: |
+        runs: |
           cd my-app
           npm build
