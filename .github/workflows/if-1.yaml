@@ -5,13 +5,13 @@ on:
 
 jobs:
   echo1:
-    if: ${{ github.event_name }} == 'push'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: echo
         run: echo ${{ github.event_name }}
   echo2:
-    if: ${{ github.event_name }} != 'push'
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - name: echo
