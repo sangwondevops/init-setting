@@ -1,0 +1,11 @@
+name: environment
+on: push
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: |
+          echo ${{ vars.value }}
+          echo ${{ secrets.value }}
