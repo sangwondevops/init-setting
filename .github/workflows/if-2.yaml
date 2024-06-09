@@ -8,8 +8,9 @@ jobs:
       - name: exit
         run: exit 1
       - name: echo
+        if: always()
         run: echo "STEP 1"
-        
+
   job-2:
     needs: [job-1]
     runs-on: ubuntu-latest
