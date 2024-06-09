@@ -9,3 +9,12 @@ jobs:
         run: |
           echo ${{ vars.value }}
           echo ${{ secrets.value }}
+
+  echo2:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: echo
+        run: |
+          echo ${{ vars.value }}
+          echo ${{ secrets.value }}
