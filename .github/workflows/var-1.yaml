@@ -7,6 +7,26 @@ env:
 jobs:
   get-evn-1:
     runs-on: ubuntu-latest
+    env:
+      level: job
     steps:
+      - name: echo var
+        run: echo "${{ env.level }}"
+
+jobs:
+  get-evn-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo var
+        env:
+          level: step
+        run: echo "${{ env.level }}"
+
+jobs:
+  get-evn-3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create var
+        run: echo "level=create_env" >> $GITHUB_ENV
       - name: echo var
         run: echo "${{ env.level }}"
