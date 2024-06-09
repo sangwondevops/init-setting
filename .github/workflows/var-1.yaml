@@ -1,0 +1,12 @@
+name: var-1
+on: push
+
+env:
+  level: workflow
+
+jobs:
+  get-evn-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo var
+        run: echo "${{ evn.level }}"
