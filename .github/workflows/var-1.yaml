@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: echo var
-        run: echo "${{ evn.level }}"
+        run: echo "${{ env.level }}"
