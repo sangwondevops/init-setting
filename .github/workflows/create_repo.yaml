@@ -26,6 +26,7 @@ jobs:
         run: |
           gh repo create hg-action/${{inputs.prefix}}-${{inputs.name}} --public --add-readme
       - name: Send custom JSON data to Slack workflow
+        if: always()
         id: slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
