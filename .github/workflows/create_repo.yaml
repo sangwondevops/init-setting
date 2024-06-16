@@ -22,5 +22,29 @@ jobs:
         run: |
           echo ${{ secrets.PERSONAL_SECRET_TOKEN }} | gh auth login --with-token
       - name: create_repo
+        id: create_repo
         run: |
           gh repo create hg-action/${{inputs.prefix}}-${{inputs.name}} --public --add-readme
+      - name: slack-webhook
+        if: always()
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+           {
+              "attachments": [
+                {
+                  "pretext": "create repo result",
+                  "color": "28a745",
+                  "fields": [
+                    {
+                      "title": "create repo result ${{ steps.create_repo.outcome }}"
+                      "short": true,
+                      "value": "${{ inputs.prefix }}-${{ inputs.name }}"
+                    }
+                  ]
+                }
+              ]
+           }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
