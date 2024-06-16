@@ -25,34 +25,16 @@ jobs:
         id: create_repo
         run: |
           gh repo create hg-action/${{inputs.prefix}}-${{inputs.name}} --public --add-readme
-      - name: slack-webhook
-        if: always()
-        uses: slackapi/slack-github-action@v1.24.0
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
         with:
-    # This data can be any valid JSON from a previous step in the GitHub Action
+          # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
               "key": "value",
               "foo": "bar"
             }
-        # with:
-        #   payload: |
-        #    {
-        #       "attachments": [
-        #         {
-        #           "pretext": "create repo result",
-        #           "color": "28a745",
-        #           "fields": [
-        #             {
-        #               "title": "create repo result ${{ steps.create_repo.outcome }}",
-        #               "short": true,
-        #               "value": "${{ inputs.prefix }}-${{ inputs.name }}"
-        #             }
-        #           ]
-        #         }
-        #       ]
-        #    }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
