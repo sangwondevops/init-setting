@@ -1,0 +1,26 @@
+name: create_repo
+on:
+  workflow_dispatch:
+    inputs:
+      prefix:
+        require: true
+        default: 'service'
+        type: choice
+        options:
+          - service
+          - org
+      name:
+        require: true
+        default: 'github-actions'
+        type: string
+
+jobs:
+  create_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: login
+        run: |
+          echo ${{ secrets.PERSONAL_SECRET_TOKEN }} | gh auth login --with-token
+      - name: create_repo
+        run: |
+          gh repo create hg-action/${{inputs.prefix}}-${{inputs.name}} --public --add-readme
