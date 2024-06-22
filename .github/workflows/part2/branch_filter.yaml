@@ -1,0 +1,11 @@
+name: branch_filter
+on:
+  push:
+    branches: ["dev"]
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: echo hello!

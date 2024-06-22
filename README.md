@@ -1,1 +1,2 @@
 # github-actions-setting
+    - test

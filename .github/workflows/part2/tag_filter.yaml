@@ -1,0 +1,13 @@
+name: tag_ftiler
+on:
+  push:
+    tags:
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  echo-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo hello

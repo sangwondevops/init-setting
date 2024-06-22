@@ -1,0 +1,28 @@
+name: if-1
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  echo1:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo ${{ github.event_name }}
+  echo2:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo ${{ github.event_name }}
+  echo3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo push
+        if: github.event_name == 'push'
+        run: echo "PUSH"
+      - name: echo workflow_dispatch
+        if: github.event_name != 'push'
+        run: echo "WORKFLOW_DISPATCH"
+
