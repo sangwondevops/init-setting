@@ -1,6 +1,6 @@
 name: cicd-1
 on:
-  pull-request:
+  pull_request:
     types: [opened, synchronize, closed]
     branches: [dev]
     paths:
