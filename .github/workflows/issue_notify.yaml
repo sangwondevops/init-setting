@@ -33,7 +33,7 @@ jobs:
     environment: ${{ needs.get-keyword.outputs.level }}
     steps:
     - name: slack
-      uese: slackapi/slack-github-action@v1.24.0
+      uses: slackapi/slack-github-action@v1.24.0
       with:
         payload: |
           {
