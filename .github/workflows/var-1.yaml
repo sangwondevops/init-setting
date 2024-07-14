@@ -26,7 +26,7 @@ jobs:
       run: echo "LEVEL ${{ env.level }}"
       env:
         level: step
-get-env:
+  get-env:
     runs-on: ubuntu-latest
     steps:
     - name: create env
