@@ -11,7 +11,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: artifact-test
-        paths: ./hello.txt
+        path: ./hello.txt
 
   download-artifacts:
     runs-on: ubuntu-latest
