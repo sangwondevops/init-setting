@@ -1,7 +1,7 @@
 name: branch-filter
 on: 
   push:
-    branches: ["dev"]
+    branches: ["dev-test"]
 
 jobs:
   branch-filter:
@@ -9,4 +9,3 @@ jobs:
     steps:
     - name: echo
       run: echo hello
-      
