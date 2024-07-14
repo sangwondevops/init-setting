@@ -27,3 +27,7 @@ jobs:
       run: |
         echo hello world
         echo github action
+    - name:
+      run: |
+        echo ${{ inputs.name }}
+        echo ${{ inputs.environment }}
