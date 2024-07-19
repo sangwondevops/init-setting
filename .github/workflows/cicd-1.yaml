@@ -14,16 +14,16 @@ jobs:
     - name: checkout the code
       uses: actions/checkout@v4
     - name: setup-node
-      uses: actions/checkout@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 18
     - name: Cache Node.js modules
       uses: actions/cache@v3
       with:
         path: ~/.npm
-        key: $ {{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-          
+          ${{ runner.os }}-node-
     - name: Install dependencies
       run: |
         cd my-app
@@ -42,11 +42,12 @@ jobs:
     steps:
     - name: checkout the code
       uses: actions/checkout@v4
-    - name: Conffigure AWS Credentials
+    - name: Configure AWS Credentials
       id: credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-region: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
@@ -54,33 +55,37 @@ jobs:
         mask-password: 'true'
     - name: docker build & push
       run: |
-        docker build -f Dockerfile --tag ${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}:${{ github.sha}}
-        docker push ${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}:${{ vars.REPOSITORY }}:${{ github.sha}}
-
+        docker build -f Dockerfile --tag ${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}:${{ github.sha }} .
+        docker push ${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}:${{ github.sha }}
+  
   deploy:
     runs-on: ubuntu-latest
-    needs: [image-build]
+    needs: [ image-build ]
     permissions:
       id-token: write
       contents: read
     steps:
-    - name: checkout
+    - name: checkout the code
       uses: actions/checkout@v4
-    - name: Configure AWS Credentials 
+    - name: Configure AWS Credentials
       id: credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ vars.AWS_REGION }}
         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
     - name: setup kubectl
-      uses: azure/setup-kubectl@v3      
+      uses: azure/setup-kubectl@v3
       with:
         version: latest
     - name: setup helm
-      uses: azure/setup-kubectl@v3
+      uses: azure/setup-helm@v3
       with:
         version: v3.11.1
-    - name: access kubernetes 
+    - name: access kubernetes
+      run: |
+        aws eks update-kubeconfig --name ${{ vars.CLUSTER_NAME }}
+    - name: deploy
+      id: status
       run: |
         helm upgrade --install my-app kubernetes/my-app --create-namespace --namespace my-app-${{ vars.SUFFIX }} \
         --set image.tag=${{ github.sha }} \
@@ -97,11 +102,11 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "Environment : dev, Deploy Result : ${{ steps.status.outcome }}, Repository : ${{ github.respository}}."
+                  "text": "Environment : dev, Deploy Result : ${{ steps.status.outcome }}, Repository : ${{ github.repository }}."
                 }
               }
             ]
           }
-    - env:
+      env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
