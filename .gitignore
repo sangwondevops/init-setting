@@ -1,0 +1,24 @@
+*.d.ts
+*.js
+!jest.config.js
+node_modules
+.DS_Store
+!.versionrc.js
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# Parcel default cache directory
+.parcel-cache
+
+# CDK context
+cdk.context.json
+
+# Container Build temp
+image.zip
+imagedefinitions.json
+autoscale.sh
+
+# env
+.*.env

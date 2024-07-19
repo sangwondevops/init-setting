@@ -1,0 +1,3 @@
+Flask==2.3.3
+# pip show werkzeug
+# pip install --upgrade werkzeug

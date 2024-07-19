@@ -1,0 +1,5218 @@
+{
+  "Resources": {
+    "LambdaSecurityGroup0BD9FC99": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Allow ",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/LambdaSecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+              ]
+            ]
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "logs:CreateLogGroup",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "createLogs"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/EcsTaskExecutionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleDefaultPolicyA7CF3192": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A",
+                          "Arn"
+                        ]
+                      },
+                      "/.env"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629",
+                          "Arn"
+                        ]
+                      },
+                      "/.env"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C",
+                          "Arn"
+                        ]
+                      },
+                      "/.env"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleDefaultPolicyA7CF3192",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/EcsTaskExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "enabled"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/Cluster/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonCluster61F1C561": {
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+      "Properties": {
+        "CapacityProviders": ["FARGATE", "FARGATE_SPOT"],
+        "Cluster": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+        },
+        "DefaultCapacityProviderStrategy": []
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/Cluster/Cluster"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonECSServiceActionEventRule2F717DCD": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "CloudWatch Event Rule to send notification on ECS Service action events.",
+        "EventPattern": {
+          "source": ["aws.ecs"],
+          "detail-type": ["ECS Service Action"],
+          "detail": {
+            "eventType": ["WARN", "ERROR"]
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/ECSServiceActionEventRule/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonECSServiceDeploymentEventRule62849BD0": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "CloudWatch Event Rule to send notification on ECS Service deployment events.",
+        "EventPattern": {
+          "source": ["aws.ecs"],
+          "detail-type": ["ECS Deployment State Change"],
+          "detail": {
+            "eventType": ["WARN", "ERROR"]
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/ECSServiceDeploymentEventRule/Resource"
+      }
+    },
+    "HinagikuDevEcsAppCloudMapNamespace1EA289D01": {
+      "Type": "AWS::ServiceDiscovery::PrivateDnsNamespace",
+      "Properties": {
+        "Name": "Hinagiku-Dev",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "Vpc": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/Resource"
+      }
+    },
+    "HinagikuDevEcsAppCloudMapNamespace1BackendService0906A2D0": {
+      "Type": "AWS::ServiceDiscovery::Service",
+      "Properties": {
+        "DnsConfig": {
+          "DnsRecords": [
+            {
+              "TTL": 30,
+              "Type": "A"
+            }
+          ],
+          "NamespaceId": {
+            "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+          },
+          "RoutingPolicy": "MULTIVALUE"
+        },
+        "Name": "backend",
+        "NamespaceId": {
+          "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/BackendService/Resource"
+      }
+    },
+    "HinagikuDevEcsAppCloudMapNamespace1FrontendService22EE104E": {
+      "Type": "AWS::ServiceDiscovery::Service",
+      "Properties": {
+        "DnsConfig": {
+          "DnsRecords": [
+            {
+              "TTL": 30,
+              "Type": "A"
+            }
+          ],
+          "NamespaceId": {
+            "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+          },
+          "RoutingPolicy": "MULTIVALUE"
+        },
+        "Name": "frontend",
+        "NamespaceId": {
+          "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/FrontendService/Resource"
+      }
+    },
+    "HinagikuDevEcsAppCloudMapNamespace1AuthServiceA6D4B219": {
+      "Type": "AWS::ServiceDiscovery::Service",
+      "Properties": {
+        "DnsConfig": {
+          "DnsRecords": [
+            {
+              "TTL": 30,
+              "Type": "A"
+            }
+          ],
+          "NamespaceId": {
+            "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+          },
+          "RoutingPolicy": "MULTIVALUE"
+        },
+        "Name": "auth",
+        "NamespaceId": {
+          "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/AuthService/Resource"
+      }
+    },
+    "HinagikuDevEcsAppCloudMaplambdaAppserviceIdACDCD52B": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Lambda/serviceId",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppCloudMapNamespace1FrontendService22EE104E",
+            "Id"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/lambdaApp-serviceId/Resource"
+      }
+    },
+    "HinagikuDevEcsAppCloudMaplambdaAppnamespace7C42AB9C": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Lambda/namespace",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": ["HinagikuDevEcsAppCloudMapNamespace1EA289D01", "Id"]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/lambdaApp-namespace/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoC722D59F": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "ImageScanningConfiguration": {
+          "ScanOnPush": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Repo/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoImageScanComplete16038C9C": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "source": ["aws.ecr"],
+          "detail-type": ["ECR Image Scan"],
+          "detail": {
+            "repository-name": [
+              {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoC722D59F"
+              }
+            ],
+            "scan-status": ["COMPLETE"]
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Repo/ImageScanComplete/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSg2FD2B361": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Sg/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesLog39879762": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B"
+        },
+        "RetentionInDays": 1827,
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Log/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesFargateCpuUtil3074902C": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+          }
+        ],
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 3,
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": "Hinagiku-Dev-EcsApp-Service"
+          }
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "CPUUtilization",
+        "Namespace": "ECS",
+        "Period": 60,
+        "Statistic": "Average",
+        "Threshold": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/FargateCpuUtil/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesEcsAppRepository6EC706C6": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/Repository/EcsApp",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoC722D59F"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/EcsAppRepository/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/PipelineSourceBucket/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucketNotifications552F117C": {
+      "Type": "Custom::S3BucketNotifications",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn"
+          ]
+        },
+        "BucketName": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A"
+        },
+        "NotificationConfiguration": {
+          "EventBridgeConfiguration": {}
+        },
+        "Managed": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/PipelineSourceBucket/Notifications/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDF1D5D42": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/DeployProject/Role/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDefaultPolicy65F88469": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:ap-northeast-1:019817421975:report-group/",
+                    {
+                      "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:ListTaskDefinitions",
+                "ecs:DescribeTaskDefinition",
+                "ecs:CreateService",
+                "ecs:UpdateService",
+                "ecs:DescribeServices",
+                "application-autoscaling:DescribeScalableTargets",
+                "application-autoscaling:RegisterScalableTarget",
+                "application-autoscaling:DeregisterScalableTarget",
+                "application-autoscaling:PutScalingPolicy",
+                "application-autoscaling:DeleteScalingPolicy",
+                "application-autoscaling:DescribeScalingPolicies",
+                "servicediscovery:GetNamespace",
+                "iam:CreateServiceLinkedRole",
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDefaultPolicy65F88469",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDF1D5D42"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/DeployProject/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Cache": {
+          "Type": "NO_CACHE"
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "ECS_CLUSTER",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+              }
+            },
+            {
+              "Name": "ECS_SERVICE",
+              "Type": "PLAINTEXT",
+              "Value": "Hinagiku-Dev-EcsApp-Service"
+            },
+            {
+              "Name": "TARGET_GROUP_ARN",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            },
+            {
+              "Name": "SECURITY_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSg2FD2B361",
+                  "GroupId"
+                ]
+              }
+            },
+            {
+              "Name": "SUBNET_1",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9"
+              }
+            },
+            {
+              "Name": "SUBNET_2",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC"
+              }
+            },
+            {
+              "Name": "SUBNET_3",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22"
+              }
+            },
+            {
+              "Name": "LOG_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesLog39879762"
+              }
+            },
+            {
+              "Name": "LOG_GROUP_SERVICE_CONNECT",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            },
+            {
+              "Name": "EXECUTION_ROLE_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "TASK_ROLE",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "FAMILY",
+              "Type": "PLAINTEXT",
+              "Value": "Hinagiku-Dev-EcsApp-Taskdef"
+            },
+            {
+              "Name": "REGISTRY_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppCloudMapNamespace1FrontendService22EE104E",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "ENVFILE_BUCKET_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A",
+                        "Arn"
+                      ]
+                    },
+                    "/.env"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "APP_PORT",
+              "Type": "PLAINTEXT",
+              "Value": "3000"
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDF1D5D42",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"pre_build\": {\n      \"commands\": [\n        \"echo \\\"The latest version of ecspresso is (It only shows up the log) :\\\"\",\n        \"curl -s https://api.github.com/repos/kayac/ecspresso/releases/latest | jq .tag_name\",\n        \"curl -sL -o ecspresso-v2.0.3-linux-amd64.tar.gz https://github.com/kayac/ecspresso/releases/download/v2.0.3/ecspresso_2.0.3_linux_amd64.tar.gz\",\n        \"tar -zxf ecspresso-v2.0.3-linux-amd64.tar.gz\",\n        \"sudo install ecspresso /usr/local/bin/ecspresso\",\n        \"ecspresso version\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"export IMAGE_NAME=`cat imagedefinitions.json | jq -r .[0].imageUri`\",\n        \"ls -lR\",\n        \"ecspresso deploy --config ecspresso.yml\",\n        \"./autoscale.sh\"\n      ]\n    }\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/DeployProject/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketPolicy60716C4F": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRole4582E212": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Role/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRoleDefaultPolicy7B50232A": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRole1DC1FAA2",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRole41B6BD9D",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRoleDefaultPolicy7B50232A",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRole4582E212"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipeline0C815F80": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "ArtifactStore": {
+          "Location": {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E"
+          },
+          "Type": "S3"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRole4582E212",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "S3",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "S3Bucket": {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A"
+                  },
+                  "S3ObjectKey": "image.zip",
+                  "PollForSourceChanges": false
+                },
+                "Name": "SourceBucket",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRole1DC1FAA2",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "Name": "DeployProject",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRole41B6BD9D",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Deploy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "DependsOn": [
+        "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRoleDefaultPolicy7B50232A",
+        "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRole4582E212"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRole1DC1FAA2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicy8B301646": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A",
+                          "Arn"
+                        ]
+                      },
+                      "/image.zip"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicy8B301646",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRole1DC1FAA2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRole41B6BD9D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicy660B1D54": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicy660B1D54",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRole41B6BD9D"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRole683E0367": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/EventsRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRoleDefaultPolicyFB34BDCA": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codepipeline:ap-northeast-1:019817421975:",
+                    {
+                      "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipeline0C815F80"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRoleDefaultPolicyFB34BDCA",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRole683E0367"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineTriggerEventRuleC36E9F65": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "account": ["019817421975"],
+          "source": ["aws.s3"],
+          "detail-type": ["Object Created"],
+          "detail": {
+            "bucket": {
+              "name": [
+                {
+                  "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A"
+                }
+              ]
+            },
+            "object": {
+              "key": ["image.zip"]
+            }
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":codepipeline:ap-northeast-1:019817421975:",
+                  {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipeline0C815F80"
+                  }
+                ]
+              ]
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRole683E0367",
+                "Arn"
+              ]
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/PipelineTriggerEventRule/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEcsAppTriggerBucketName82B5A04A": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/TriggerBucket/EcsApp",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/EcsAppTriggerBucketName/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoCE5391E0": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "ImageScanningConfiguration": {
+          "ScanOnPush": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Repo/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoImageScanComplete04EA7010": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "source": ["aws.ecr"],
+          "detail-type": ["ECR Image Scan"],
+          "detail": {
+            "repository-name": [
+              {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoCE5391E0"
+              }
+            ],
+            "scan-status": ["COMPLETE"]
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Repo/ImageScanComplete/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgfromHinagikuDevEcsLambdaSecurityGroup00DF96935000499A2C72": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "from HinagikuDevEcsLambdaSecurityGroup00DF9693:5000",
+        "FromPort": 5000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": ["LambdaSecurityGroup0BD9FC99", "GroupId"]
+        },
+        "ToPort": 5000
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg/from HinagikuDevEcsLambdaSecurityGroup00DF9693:5000"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSgB3811A785000CA78FC68": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSgB3811A78:5000",
+        "FromPort": 5000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSg2FD2B361",
+            "GroupId"
+          ]
+        },
+        "ToPort": 5000
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSgB3811A78:5000"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesLogE7E6E456": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B"
+        },
+        "RetentionInDays": 1827,
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Log/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesFargateCpuUtil557F995D": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+          }
+        ],
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 3,
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": "Hinagiku-Dev-EcsBackend-Service"
+          }
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "CPUUtilization",
+        "Namespace": "ECS",
+        "Period": 60,
+        "Statistic": "Average",
+        "Threshold": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/FargateCpuUtil/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesEcsBackendRepositoryCEDE254F": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/Repository/EcsBackend",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoCE5391E0"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/EcsBackendRepository/Resource"
+      }
+    },
+    "HinagikuDevEcsAppBackendTaskRole1560353E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": ["arn:aws:iam::aws:policy/AdministratorAccess"],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/BackendTaskRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/PipelineSourceBucket/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucketNotifications558FF021": {
+      "Type": "Custom::S3BucketNotifications",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn"
+          ]
+        },
+        "BucketName": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629"
+        },
+        "NotificationConfiguration": {
+          "EventBridgeConfiguration": {}
+        },
+        "Managed": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/PipelineSourceBucket/Notifications/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleA1457208": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/DeployProject/Role/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleDefaultPolicy6E43A574": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:ap-northeast-1:019817421975:report-group/",
+                    {
+                      "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:ListTaskDefinitions",
+                "ecs:DescribeTaskDefinition",
+                "ecs:CreateService",
+                "ecs:UpdateService",
+                "ecs:DescribeServices",
+                "application-autoscaling:DescribeScalableTargets",
+                "application-autoscaling:RegisterScalableTarget",
+                "application-autoscaling:DeregisterScalableTarget",
+                "application-autoscaling:PutScalingPolicy",
+                "application-autoscaling:DeleteScalingPolicy",
+                "application-autoscaling:DescribeScalingPolicies",
+                "servicediscovery:GetNamespace",
+                "iam:CreateServiceLinkedRole",
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppBackendTaskRole1560353E",
+                    "Arn"
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleDefaultPolicy6E43A574",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleA1457208"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/DeployProject/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Cache": {
+          "Type": "NO_CACHE"
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "ECS_CLUSTER",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+              }
+            },
+            {
+              "Name": "ECS_SERVICE",
+              "Type": "PLAINTEXT",
+              "Value": "Hinagiku-Dev-EcsBackend-Service"
+            },
+            {
+              "Name": "TARGET_GROUP_ARN",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            },
+            {
+              "Name": "SECURITY_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45",
+                  "GroupId"
+                ]
+              }
+            },
+            {
+              "Name": "SUBNET_1",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9"
+              }
+            },
+            {
+              "Name": "SUBNET_2",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC"
+              }
+            },
+            {
+              "Name": "SUBNET_3",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22"
+              }
+            },
+            {
+              "Name": "LOG_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesLogE7E6E456"
+              }
+            },
+            {
+              "Name": "LOG_GROUP_SERVICE_CONNECT",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            },
+            {
+              "Name": "EXECUTION_ROLE_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "TASK_ROLE",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppBackendTaskRole1560353E",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "FAMILY",
+              "Type": "PLAINTEXT",
+              "Value": "Hinagiku-Dev-EcsBackend-Taskdef"
+            },
+            {
+              "Name": "REGISTRY_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppCloudMapNamespace1BackendService0906A2D0",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "ENVFILE_BUCKET_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629",
+                        "Arn"
+                      ]
+                    },
+                    "/.env"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "APP_PORT",
+              "Type": "PLAINTEXT",
+              "Value": "5000"
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleA1457208",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"pre_build\": {\n      \"commands\": [\n        \"echo \\\"The latest version of ecspresso is (It only shows up the log) :\\\"\",\n        \"curl -s https://api.github.com/repos/kayac/ecspresso/releases/latest | jq .tag_name\",\n        \"curl -sL -o ecspresso-v2.0.3-linux-amd64.tar.gz https://github.com/kayac/ecspresso/releases/download/v2.0.3/ecspresso_2.0.3_linux_amd64.tar.gz\",\n        \"tar -zxf ecspresso-v2.0.3-linux-amd64.tar.gz\",\n        \"sudo install ecspresso /usr/local/bin/ecspresso\",\n        \"ecspresso version\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"export IMAGE_NAME=`cat imagedefinitions.json | jq -r .[0].imageUri`\",\n        \"ls -lR\",\n        \"ecspresso deploy --config ecspresso.yml\",\n        \"./autoscale.sh\"\n      ]\n    }\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/DeployProject/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/ArtifactsBucket/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucketPolicy9B23657C": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRole78BB2B64": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Role/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRoleDefaultPolicy4443FD63": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRole386A854C",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRole0F62154B",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRoleDefaultPolicy4443FD63",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRole78BB2B64"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipeline91737D3D": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "ArtifactStore": {
+          "Location": {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6"
+          },
+          "Type": "S3"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRole78BB2B64",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "S3",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "S3Bucket": {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629"
+                  },
+                  "S3ObjectKey": "image.zip",
+                  "PollForSourceChanges": false
+                },
+                "Name": "SourceBucket",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRole386A854C",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "Name": "DeployProject",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRole0F62154B",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Deploy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "DependsOn": [
+        "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRoleDefaultPolicy4443FD63",
+        "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRole78BB2B64"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRole386A854C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicyF0EFF955": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629",
+                          "Arn"
+                        ]
+                      },
+                      "/image.zip"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicyF0EFF955",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRole386A854C"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRole0F62154B": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicyBBBF2CD0": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicyBBBF2CD0",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRole0F62154B"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRole14EBE38C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/EventsRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRoleDefaultPolicyBEC5C51D": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codepipeline:ap-northeast-1:019817421975:",
+                    {
+                      "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipeline91737D3D"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRoleDefaultPolicyBEC5C51D",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRole14EBE38C"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineTriggerEventRule13F7953B": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "account": ["019817421975"],
+          "source": ["aws.s3"],
+          "detail-type": ["Object Created"],
+          "detail": {
+            "bucket": {
+              "name": [
+                {
+                  "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629"
+                }
+              ]
+            },
+            "object": {
+              "key": ["image.zip"]
+            }
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":codepipeline:ap-northeast-1:019817421975:",
+                  {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipeline91737D3D"
+                  }
+                ]
+              ]
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRole14EBE38C",
+                "Arn"
+              ]
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/PipelineTriggerEventRule/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEcsBackendTriggerBucketName3E52E040": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/TriggerBucket/EcsBackend",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/EcsBackendTriggerBucketName/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoB0C14D5B": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "ImageScanningConfiguration": {
+          "ScanOnPush": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Repo/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoImageScanComplete4F3C5B88": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "source": ["aws.ecr"],
+          "detail-type": ["ECR Image Scan"],
+          "detail": {
+            "repository-name": [
+              {
+                "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoB0C14D5B"
+              }
+            ],
+            "scan-status": ["COMPLETE"]
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Repo/ImageScanComplete/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesSg0851ED99": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Sg/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesSgfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC32380005B92832A": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:8000",
+        "FromPort": 8000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesSg0851ED99",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45",
+            "GroupId"
+          ]
+        },
+        "ToPort": 8000
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Sg/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:8000"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesLog22FAA9D9": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B"
+        },
+        "RetentionInDays": 1827,
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Log/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesFargateCpuUtil7B3A5E9F": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+          }
+        ],
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 3,
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": "Hinagiku-Dev-Authenticate-Service"
+          }
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "CPUUtilization",
+        "Namespace": "ECS",
+        "Period": 60,
+        "Statistic": "Average",
+        "Threshold": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/FargateCpuUtil/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesAuthenticateRepository9BAB3E38": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/Repository/Authenticate",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoB0C14D5B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/AuthenticateRepository/Resource"
+      }
+    },
+    "HinagikuDevEcsAppAuthTaskRoleC6B9C9E6": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": ["arn:aws:iam::aws:policy/AdministratorAccess"],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/AuthTaskRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/PipelineSourceBucket/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketNotifications25F0C0DA": {
+      "Type": "Custom::S3BucketNotifications",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn"
+          ]
+        },
+        "BucketName": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C"
+        },
+        "NotificationConfiguration": {
+          "EventBridgeConfiguration": {}
+        },
+        "Managed": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/PipelineSourceBucket/Notifications/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRole2FD2F28F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/DeployProject/Role/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRoleDefaultPolicy8FEBE921": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:ap-northeast-1:019817421975:report-group/",
+                    {
+                      "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:ListTaskDefinitions",
+                "ecs:DescribeTaskDefinition",
+                "ecs:CreateService",
+                "ecs:UpdateService",
+                "ecs:DescribeServices",
+                "application-autoscaling:DescribeScalableTargets",
+                "application-autoscaling:RegisterScalableTarget",
+                "application-autoscaling:DeregisterScalableTarget",
+                "application-autoscaling:PutScalingPolicy",
+                "application-autoscaling:DeleteScalingPolicy",
+                "application-autoscaling:DescribeScalingPolicies",
+                "servicediscovery:GetNamespace",
+                "iam:CreateServiceLinkedRole",
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": ["HinagikuDevEcsAppAuthTaskRoleC6B9C9E6", "Arn"]
+                }
+              ]
+            },
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRoleDefaultPolicy8FEBE921",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRole2FD2F28F"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/DeployProject/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Cache": {
+          "Type": "NO_CACHE"
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "ECS_CLUSTER",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+              }
+            },
+            {
+              "Name": "ECS_SERVICE",
+              "Type": "PLAINTEXT",
+              "Value": "Hinagiku-Dev-Authenticate-Service"
+            },
+            {
+              "Name": "TARGET_GROUP_ARN",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            },
+            {
+              "Name": "SECURITY_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesSg0851ED99",
+                  "GroupId"
+                ]
+              }
+            },
+            {
+              "Name": "SUBNET_1",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9"
+              }
+            },
+            {
+              "Name": "SUBNET_2",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC"
+              }
+            },
+            {
+              "Name": "SUBNET_3",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22"
+              }
+            },
+            {
+              "Name": "LOG_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesLog22FAA9D9"
+              }
+            },
+            {
+              "Name": "LOG_GROUP_SERVICE_CONNECT",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            },
+            {
+              "Name": "EXECUTION_ROLE_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "TASK_ROLE",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": ["HinagikuDevEcsAppAuthTaskRoleC6B9C9E6", "Arn"]
+              }
+            },
+            {
+              "Name": "FAMILY",
+              "Type": "PLAINTEXT",
+              "Value": "Hinagiku-Dev-Authenticate-Taskdef"
+            },
+            {
+              "Name": "REGISTRY_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppCloudMapNamespace1AuthServiceA6D4B219",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "ENVFILE_BUCKET_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C",
+                        "Arn"
+                      ]
+                    },
+                    "/.env"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "APP_PORT",
+              "Type": "PLAINTEXT",
+              "Value": "8000"
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRole2FD2F28F",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"pre_build\": {\n      \"commands\": [\n        \"echo \\\"The latest version of ecspresso is (It only shows up the log) :\\\"\",\n        \"curl -s https://api.github.com/repos/kayac/ecspresso/releases/latest | jq .tag_name\",\n        \"curl -sL -o ecspresso-v2.0.3-linux-amd64.tar.gz https://github.com/kayac/ecspresso/releases/download/v2.0.3/ecspresso_2.0.3_linux_amd64.tar.gz\",\n        \"tar -zxf ecspresso-v2.0.3-linux-amd64.tar.gz\",\n        \"sudo install ecspresso /usr/local/bin/ecspresso\",\n        \"ecspresso version\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"export IMAGE_NAME=`cat imagedefinitions.json | jq -r .[0].imageUri`\",\n        \"ls -lR\",\n        \"ecspresso deploy --config ecspresso.yml\",\n        \"./autoscale.sh\"\n      ]\n    }\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/DeployProject/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/ArtifactsBucket/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketPolicy7F8420AC": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleFEA6147C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Role/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleDefaultPolicyC83A48E9": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleD8297BAA",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRole6948A030",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleDefaultPolicyC83A48E9",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleFEA6147C"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDFB42D23": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "ArtifactStore": {
+          "Location": {
+            "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB"
+          },
+          "Type": "S3"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleFEA6147C",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "S3",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "S3Bucket": {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C"
+                  },
+                  "S3ObjectKey": "image.zip",
+                  "PollForSourceChanges": false
+                },
+                "Name": "SourceBucket",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleD8297BAA",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "Name": "DeployProject",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRole6948A030",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Deploy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "DependsOn": [
+        "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleDefaultPolicyC83A48E9",
+        "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleFEA6147C"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleD8297BAA": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicy82958EBC": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C",
+                          "Arn"
+                        ]
+                      },
+                      "/image.zip"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicy82958EBC",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleD8297BAA"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRole6948A030": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicy051E8319": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicy051E8319",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRole6948A030"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRole1F24ABB2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/EventsRole/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRoleDefaultPolicyA05E0210": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codepipeline:ap-northeast-1:019817421975:",
+                    {
+                      "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDFB42D23"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRoleDefaultPolicyA05E0210",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRole1F24ABB2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineTriggerEventRuleF0371831": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "account": ["019817421975"],
+          "source": ["aws.s3"],
+          "detail-type": ["Object Created"],
+          "detail": {
+            "bucket": {
+              "name": [
+                {
+                  "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C"
+                }
+              ]
+            },
+            "object": {
+              "key": ["image.zip"]
+            }
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":codepipeline:ap-northeast-1:019817421975:",
+                  {
+                    "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDFB42D23"
+                  }
+                ]
+              ]
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRole1F24ABB2",
+                "Arn"
+              ]
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/PipelineTriggerEventRule/Resource"
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineAuthenticateTriggerBucketNameF1C52196": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/TriggerBucket/Authenticate",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/AuthenticateTriggerBucketName/Resource"
+      }
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource"
+      }
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource"
+      }
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Description": "AWS CloudFormation handler for \"Custom::S3BucketNotifications\" resources (@aws-cdk/aws-s3)",
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore\nimport json\nimport logging\nimport urllib.request\n\ns3 = boto3.client(\"s3\")\n\nEVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'\nCONFIGURATION_TYPES = [\"TopicConfigurations\", \"QueueConfigurations\", \"LambdaFunctionConfigurations\"]\n\ndef handler(event: dict, context):\n  response_status = \"SUCCESS\"\n  error_message = \"\"\n  try:\n    props = event[\"ResourceProperties\"]\n    notification_configuration = props[\"NotificationConfiguration\"]\n    managed = props.get('Managed', 'true').lower() == 'true'\n    stack_id = event['StackId']\n    old = event.get(\"OldResourceProperties\", {}).get(\"NotificationConfiguration\", {})\n    if managed:\n      config = handle_managed(event[\"RequestType\"], notification_configuration)\n    else:\n      config = handle_unmanaged(props[\"BucketName\"], stack_id, event[\"RequestType\"], notification_configuration, old)\n    s3.put_bucket_notification_configuration(Bucket=props[\"BucketName\"], NotificationConfiguration=config)\n  except Exception as e:\n    logging.exception(\"Failed to put bucket notification configuration\")\n    response_status = \"FAILED\"\n    error_message = f\"Error: {str(e)}. \"\n  finally:\n    submit_response(event, context, response_status, error_message)\n\ndef handle_managed(request_type, notification_configuration):\n  if request_type == 'Delete':\n    return {}\n  return notification_configuration\n\ndef handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):\n  def with_id(n):\n    n['Id'] = f\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\"\n    return n\n\n  external_notifications = {}\n  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)\n  for t in CONFIGURATION_TYPES:\n    if request_type == 'Update':\n        ids = [with_id(n) for n in old.get(t, [])]\n        old_incoming_ids = [n['Id'] for n in ids]\n        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]\n    elif request_type == 'Create':\n        external_notifications[t] = [n for n in existing_notifications.get(t, [])]\n  if EVENTBRIDGE_CONFIGURATION in existing_notifications:\n    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  if request_type == 'Delete':\n    return external_notifications\n\n  notifications = {}\n  for t in CONFIGURATION_TYPES:\n    external = external_notifications.get(t, [])\n    incoming = [with_id(n) for n in notification_configuration.get(t, [])]\n    notifications[t] = external + incoming\n\n  if EVENTBRIDGE_CONFIGURATION in notification_configuration:\n    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]\n  elif EVENTBRIDGE_CONFIGURATION in external_notifications:\n    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  return notifications\n\ndef submit_response(event: dict, context, response_status: str, error_message: str):\n  response_body = json.dumps(\n    {\n      \"Status\": response_status,\n      \"Reason\": f\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\",\n      \"PhysicalResourceId\": event.get(\"PhysicalResourceId\") or event[\"LogicalResourceId\"],\n      \"StackId\": event[\"StackId\"],\n      \"RequestId\": event[\"RequestId\"],\n      \"LogicalResourceId\": event[\"LogicalResourceId\"],\n      \"NoEcho\": False,\n    }\n  ).encode(\"utf-8\")\n  headers = {\"content-type\": \"\", \"content-length\": str(len(response_body))}\n  try:\n    req = urllib.request.Request(url=event[\"ResponseURL\"], headers=headers, data=response_body, method=\"PUT\")\n    with urllib.request.urlopen(req) as response:\n      print(response.read().decode(\"utf-8\"))\n    print(\"Status code: \" + response.reason)\n  except Exception as e:\n      print(\"send(..) failed executing request.urlopen(..): \" + str(e))\n"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.9",
+        "Timeout": 300,
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppLambdapolicy986307D9": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "Description": "IAM policy for Lambda",
+        "ManagedPolicyName": "Lambda_basic_policy",
+        "Path": "/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:*",
+                "ecr:*",
+                "apigateway:*",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses",
+                "servicediscovery:DiscoverInstances"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Lambda_policy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppFrontendRoleHinagikuDev4108348C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          },
+          {
+            "Ref": "HinagikuDevLambdaAppLambdapolicy986307D9"
+          }
+        ],
+        "RoleName": "Lambda-Role",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Frontend-Role-Hinagiku-Dev/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppFrontendRoleHinagikuDevDefaultPolicy24317175": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C",
+                          "Arn"
+                        ]
+                      },
+                      "/.env"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevLambdaAppFrontendRoleHinagikuDevDefaultPolicy24317175",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevLambdaAppFrontendRoleHinagikuDev4108348C"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Frontend-Role-Hinagiku-Dev/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRole1C487DC1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AdministratorAccess"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/CodeBuildRole/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRoleDefaultPolicyDC55E631": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-northeast-1:019817421975:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:ap-northeast-1:019817421975:report-group/",
+                    {
+                      "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:ListTaskDefinitions",
+                "ecs:DescribeTaskDefinition",
+                "ecs:CreateService",
+                "ecs:UpdateService",
+                "ecs:DescribeServices",
+                "application-autoscaling:DescribeScalableTargets",
+                "application-autoscaling:RegisterScalableTarget",
+                "application-autoscaling:DeregisterScalableTarget",
+                "application-autoscaling:PutScalingPolicy",
+                "application-autoscaling:DeleteScalingPolicy",
+                "application-autoscaling:DescribeScalingPolicies",
+                "servicediscovery:GetNamespace",
+                "iam:CreateServiceLinkedRole",
+                "sts:AssumeRole",
+                "lambda:*",
+                "s3:GetObject",
+                "ssm:GetParameter",
+                "cloudformation:DescribeStacks",
+                "apigateway:GET",
+                "iam:AttachRolePolicy",
+                "apigateway:POST",
+                "iam:PassRole",
+                "iam:CreateRole",
+                "apigateway:PUT",
+                "apigatewayv2:CreateIntegration",
+                "apigatewayv2:GetRoutes",
+                "apigatewayv2:UpdateStage",
+                "apigatewayv2:CreateStage",
+                "sts:GetCallerIdentity",
+                "servicediscovery:RegisterInstance"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRoleDefaultPolicyDC55E631",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRole1C487DC1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/CodeBuildRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodePipelineRole009D64A5": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AdministratorAccess"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/CodePipelineRole/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/PipelineSourceBucket/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucketNotificationsE17B7D03": {
+      "Type": "Custom::S3BucketNotifications",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn"
+          ]
+        },
+        "BucketName": {
+          "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+        },
+        "NotificationConfiguration": {
+          "EventBridgeConfiguration": {}
+        },
+        "Managed": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/PipelineSourceBucket/Notifications/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Cache": {
+          "Type": "NO_CACHE"
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "SECURITY_GROUP",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": ["LambdaSecurityGroup0BD9FC99", "GroupId"]
+              }
+            },
+            {
+              "Name": "SUBNET_1",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9"
+              }
+            },
+            {
+              "Name": "SUBNET_2",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC"
+              }
+            },
+            {
+              "Name": "SUBNET_3",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22"
+              }
+            },
+            {
+              "Name": "REGISTRY_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "HinagikuDevEcsAppCloudMapNamespace1FrontendService22EE104E",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "ENVFILE_BUCKET_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C",
+                        "Arn"
+                      ]
+                    },
+                    "/.env"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "SourceBucket",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+              }
+            },
+            {
+              "Name": "Role",
+              "Type": "PLAINTEXT",
+              "Value": ""
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRole1C487DC1",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"pre_build\": {\n      \"commands\": [\n        \"pwd\",\n        \"aws s3 cp s3://${SourceBucket}/image.zip image.zip\",\n        \"mkdir -p ./unzip_folder\",\n        \"ls -l\",\n        \"unzip -o image.zip -d ./unzip_folder\",\n        \"ls -l ./unzip_folder\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"echo \\\"Create to Lambda  is Running\\\"\",\n        \"bash ./unzip_folder/lambda.sh\",\n        \"echo \\\"Lambda has been created\\\"\"\n      ]\n    }\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/DeployProject/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketPolicyB9077346": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRole8E085BDD": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Role/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRoleDefaultPolicyA0789FDB": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRole6F2BF6FA",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDF4A481C",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRoleDefaultPolicyA0789FDB",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRole8E085BDD"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineC5FED916": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "ArtifactStore": {
+          "Location": {
+            "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02"
+          },
+          "Type": "S3"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRole8E085BDD",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "S3",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "S3Bucket": {
+                    "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+                  },
+                  "S3ObjectKey": "image.zip",
+                  "PollForSourceChanges": false
+                },
+                "Name": "SourceBucket",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRole6F2BF6FA",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "Artifact_Source_SourceBucket"
+                  }
+                ],
+                "Name": "DeployProject",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDF4A481C",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Deploy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "DependsOn": [
+        "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRoleDefaultPolicyA0789FDB",
+        "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRole8E085BDD"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRole6F2BF6FA": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicyFDFECC14": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C",
+                          "Arn"
+                        ]
+                      },
+                      "/image.zip"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicyFDFECC14",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRole6F2BF6FA"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDF4A481C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicyCBF2924A": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicyCBF2924A",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDF4A481C"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleA7BC844E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/EventsRole/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleDefaultPolicyEA564BCA": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codepipeline:ap-northeast-1:019817421975:",
+                    {
+                      "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineC5FED916"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleDefaultPolicyEA564BCA",
+        "Roles": [
+          {
+            "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleA7BC844E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineTriggerEventRule3FCBCFDB": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "account": ["019817421975"],
+          "source": ["aws.s3"],
+          "detail-type": ["Object Created"],
+          "detail": {
+            "bucket": {
+              "name": [
+                {
+                  "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+                }
+              ]
+            },
+            "object": {
+              "key": ["image.zip"]
+            }
+          }
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":codepipeline:ap-northeast-1:019817421975:",
+                  {
+                    "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineC5FED916"
+                  }
+                ]
+              ]
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleA7BC844E",
+                "Arn"
+              ]
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/PipelineTriggerEventRule/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineLambdaLambdaSecurityGroup3E0055D2": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Lambda/Lambda-SecurityGroup",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": ["LambdaSecurityGroup0BD9FC99", "GroupId"]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Lambda--Lambda-SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineLambdaRole3E300F1B": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Lambda/Lambda-Role",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "HinagikuDevLambdaAppFrontendRoleHinagikuDev4108348C",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Lambda-Role/Resource"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineLambdaTriggerBucketNameFCBD85DE": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "/Hinagiku/TriggerBucket/Lambda-Bucket",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Lambda-TriggerBucketName/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/32QXU7DMBCEz8K7u7TlBFAkhMRPlB4Auc4StnXsaNdOVVm+O0ocWhCIp/12dix5Zg2r9Q0sr/RRFqY5LCztIG2DNgelj/KW0KwhbdFEpnB6YB97tXl3/wuPrmUUyYp0B6n2FkfLNCtvyZzGdaZn7XSLzUX/IWSFRiBtbJSAPJ5/40b32lA4VewHapBvRbwhHcg7yQoHdEEg1XH+RbSYlSAPZLAhMX5APkGqmAYd8N7Ji+5Qem0m+1/ytjwusSfMSqQba2NybaVZdzj/8byMSRhSjb0XCp6nrJctK+tbgfTk23OnX5yVsT42Rx3MB6Rbq7kbzxNkJTeQ7qI5YBjFmcq4lPp9z8r4BneRbAOpoh4tOazY79GEEnnCYuvn+8U5WWbOWdUoPnJp4zWGPoYSrKhZOd8g7OV6WC9htYLl1V6IFhxdoA6hLvMTOPcZQ4UCAAA="
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Ecs/CDKMetadata/Default"
+      }
+    }
+  },
+  "Outputs": {
+    "HinagikuDevEcsAppHinagikuDevEcsCommonexecutionRoleArn88043E05": {
+      "Value": {
+        "Fn::GetAtt": [
+          "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE",
+          "Arn"
+        ]
+      }
+    },
+    "HinagikuDevEcsAppHinagikuDevEcsCommonclusterName7CEAB9AE": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+      }
+    },
+    "HinagikuDevEcsAppNamespaceIdB2E60C7D": {
+      "Value": "Hinagiku-Dev"
+    },
+    "ExportEcsAppRepositoryName": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoC722D59F"
+      },
+      "Export": {
+        "Name": "EcsAppRepositoryName"
+      }
+    },
+    "ExportsourceBucketEcsApp": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A"
+      },
+      "Export": {
+        "Name": "sourceBucket-EcsApp"
+      }
+    },
+    "ExportEcsBackendRepositoryName": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoCE5391E0"
+      },
+      "Export": {
+        "Name": "EcsBackendRepositoryName"
+      }
+    },
+    "ExportsourceBucketEcsBackend": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629"
+      },
+      "Export": {
+        "Name": "sourceBucket-EcsBackend"
+      }
+    },
+    "ExportAuthenticateRepositoryName": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoB0C14D5B"
+      },
+      "Export": {
+        "Name": "AuthenticateRepositoryName"
+      }
+    },
+    "ExportsourceBucketAuthenticate": {
+      "Value": {
+        "Ref": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C"
+      },
+      "Export": {
+        "Name": "sourceBucket-Authenticate"
+      }
+    },
+    "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceBucketName5B5D9552": {
+      "Description": "The name of the source bucket",
+      "Value": {
+        "Ref": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+      }
+    },
+    "ExportsOutputFnGetAttHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45GroupId4CE95B61": {
+      "Value": {
+        "Fn::GetAtt": [
+          "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45",
+          "GroupId"
+        ]
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-Ecs:ExportsOutputFnGetAttHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45GroupId4CE95B61"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  ["1", "2", "3", "4", "5"],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

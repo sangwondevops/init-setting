@@ -1,0 +1,20 @@
+{
+  "version": "36.0.0",
+  "files": {
+    "31ab14737da516d8e42473c5bcc86944ee1a345872b6fe25d7cc84c6bc418b6b": {
+      "source": {
+        "path": "Hinagiku-Dev-Redis.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "019817421975-ap-northeast-1": {
+          "bucketName": "cdk-hnb659fds-assets-019817421975-ap-northeast-1",
+          "objectKey": "31ab14737da516d8e42473c5bcc86944ee1a345872b6fe25d7cc84c6bc418b6b.json",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-file-publishing-role-019817421975-ap-northeast-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

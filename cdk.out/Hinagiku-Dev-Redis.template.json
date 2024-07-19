@@ -1,0 +1,219 @@
+{
+  "Resources": {
+    "ElastiCacheRedisSecret": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedisSecret"
+      }
+    },
+    "ElastiCacheRedisLoggroupFB0C3E33": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 90,
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedisLoggroup/Resource"
+      }
+    },
+    "ElastiCacheRedisSecuritygGroup20195709": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-Redis/ElastiCacheRedisSecuritygGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedisSecuritygGroup/Resource"
+      }
+    },
+    "ElastiCacheRedisSecuritygGroupfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC32363790DC713AD": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:6379",
+        "FromPort": 6379,
+        "GroupId": {
+          "Fn::GetAtt": ["ElastiCacheRedisSecuritygGroup20195709", "GroupId"]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::ImportValue": "Hinagiku-Dev-Ecs:ExportsOutputFnGetAttHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45GroupId4CE95B61"
+        },
+        "ToPort": 6379
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedisSecuritygGroup/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:6379"
+      }
+    },
+    "ElastiCacheRedisSubnetGroup": {
+      "Type": "AWS::ElastiCache::SubnetGroup",
+      "Properties": {
+        "CacheSubnetGroupName": "Hinagiku-Dev-Redis-Subnetgroup",
+        "Description": "for redis",
+        "SubnetIds": [
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet1Subnet20A4E4F543808CB5"
+          },
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet2Subnet6CB636EB8A56621E"
+          },
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet3SubnetF4BE363A1C1EC14A"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedisSubnetGroup"
+      }
+    },
+    "ElastiCacheRedisCustomParameterGroup": {
+      "Type": "AWS::ElastiCache::ParameterGroup",
+      "Properties": {
+        "CacheParameterGroupFamily": "redis7",
+        "Description": "CustomParameterGroupForRedis",
+        "Properties": {
+          "cluster-enabled": "yes"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedisCustomParameterGroup"
+      }
+    },
+    "ElastiCacheRedis": {
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+      "Properties": {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": true,
+        "CacheNodeType": "cache.t3.small",
+        "CacheParameterGroupName": {
+          "Ref": "ElastiCacheRedisCustomParameterGroup"
+        },
+        "CacheSubnetGroupName": "Hinagiku-Dev-Redis-Subnetgroup",
+        "Engine": "redis",
+        "EngineVersion": "7.1",
+        "KmsKeyId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAppKeyB9380A62E17512A0"
+        },
+        "LogDeliveryConfigurations": [
+          {
+            "DestinationDetails": {
+              "CloudWatchLogsDetails": {
+                "LogGroup": {
+                  "Ref": "ElastiCacheRedisLoggroupFB0C3E33"
+                }
+              }
+            },
+            "DestinationType": "cloudwatch-logs",
+            "LogFormat": "json",
+            "LogType": "slow-log"
+          }
+        ],
+        "MultiAZEnabled": true,
+        "NotificationTopicArn": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+        },
+        "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 2,
+        "ReplicationGroupDescription": "redis",
+        "ReplicationGroupId": "Hinagiku-Dev-Redis-repGroup",
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": ["ElastiCacheRedisSecuritygGroup20195709", "GroupId"]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "TransitEncryptionEnabled": true
+      },
+      "DependsOn": ["ElastiCacheRedisSubnetGroup"],
+      "UpdatePolicy": {
+        "UseOnlineResharding": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/ElastiCacheRedis"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/32NzQ6CMBCEn8V7WQEfwYMx8WDkAcyyrlh+WrLbSkzDuxslcvQ0k29mMiUU5Q7yDU6a0a3LeltDqgJSZ3DSa1Im4aADOmxYYH931ZeY3jcK6eSbg/g4mv3d/fxsmEpIFVMUG15r/h8cXSOsOhvuUYMlpAdD+rRi7TisozMKDhxYVnLhsbeEwXq3/M8LVR+FeDbO3xha3T7LHIoC8k2r1mYSXbADw2XRN72QkwoIAQAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Redis/CDKMetadata/Default"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  ["1", "2", "3", "4", "5"],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

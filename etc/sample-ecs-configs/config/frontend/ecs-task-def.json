@@ -1,0 +1,39 @@
+{
+  "containerDefinitions": [
+    {
+      "cpu": 0,
+      "dockerLabels": {},
+      "essential": true,
+      "image": "{{ must_env `IMAGE_NAME` }}",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "{{ must_env `LOG_GROUP` }}",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "frontend-"
+        }
+      },
+      "name": "frontend",
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environmentFiles": [
+        {
+          "value": "{{ must_env `ENVFILE_BUCKET_ARN` }}",
+          "type": "s3"
+        }
+      ]
+    }
+  ],
+  "cpu": "256",
+  "executionRoleArn": "{{ must_env `EXECUTION_ROLE_ARN` }}",
+  "taskRoleArn": "{{ must_env `TASK_ROLE` }}",
+  "family": "{{ must_env `FAMILY` }}",
+  "memory": "512",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"]
+}

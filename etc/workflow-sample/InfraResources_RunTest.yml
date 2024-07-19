@@ -1,0 +1,29 @@
+name: InfraResources_RunTest
+
+env:
+  envkey: prod #-c environmentにて指定した環境名。
+on:
+  pull_request:
+    branches: ['マージ先ブランチ'] #branchは環境に合わせて変更が必要
+    paths: ['lib/**', 'bin/**', 'params/**'] #トリガー対象ファイル指定箇所
+jobs:
+  aws_cdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3 #2023/09/28現在setup-nodeのみv3までしか存在していない。v4が追加され次第更新。
+        with:
+          node-version: 18
+
+      - name: install
+        run: npm install
+
+      - name: cdk ls
+        run: npx cdk ls -c environment=${{env.envkey}}
+
+    # テスト用シェルの作成待ち
+    #  - name: RunsSh
+    #    run: test.sh

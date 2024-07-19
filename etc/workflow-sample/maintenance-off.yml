@@ -1,0 +1,67 @@
+name: 通常画面表示
+on:
+  workflow_dispatch:
+    inputs:
+      WebACL_NAME_param:
+        description: 'WebACL名を入力'
+        required: true
+
+env:
+  WebACL_NAME: ${{ github.event.inputs.WebACL_NAME_param }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.maintenance }}
+          role-session-name: GitHubActions
+          aws-region: us-east-1
+
+      - name: update WebACL
+        run: |
+
+          # WebACLのIDを取得
+            WEB_ACL_ID=`aws wafv2 list-web-acls \
+              --scope=CLOUDFRONT \
+              --region=us-east-1 \
+              --query "WebACLs[?Name=='${{ env.WebACL_NAME }}'].Id" \
+              --output text`
+
+          # WebACLのトークンを取得
+            WEB_ACL_TOKEN=`aws wafv2 list-web-acls \
+              --scope=CLOUDFRONT \
+              --region=us-east-1 \
+              --query "WebACLs[?Name=='${{ env.WebACL_NAME }}'].LockToken" \
+              --output text`
+
+          # IPsetルールのActionをCountに変更
+            aws wafv2 get-web-acl \
+              --name ${{ env.WebACL_NAME }} \
+              --scope=CLOUDFRONT \
+              --region=us-east-1 \
+              --id $WEB_ACL_ID | jq '.WebACL.Rules[] |= if .Name == "IPset" then .Action |= {"Count": {}} else . end' > webacl-rules-updete-IPset.json
+
+          # Basic認証ルールのActionをCountに変更
+            cat webacl-rules-updete-IPset.json | jq '.WebACL.Rules[] |= if .Name == "BasicAuth" then .Action |= {"Count": {}} else . end' | jq .WebACL.Rules > webacl-rules-updete.json
+
+          # WebACL更新
+            aws wafv2 update-web-acl \
+              --name ${{ env.WebACL_NAME }} \
+              --scope=CLOUDFRONT \
+              --region=us-east-1 \
+              --id $WEB_ACL_ID \
+              --lock-token $WEB_ACL_TOKEN \
+              --visibility-config SampledRequestsEnabled=true,CloudWatchMetricsEnabled=true,MetricName=BLEAWebACL \
+              --default-action Allow={} \
+              --rules file://webacl-rules-updete.json

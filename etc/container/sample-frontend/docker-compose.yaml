@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  flask_app:
+    build: ../sample-backend
+    container_name: flask_app
+
+  nginx:
+    build: .
+    container_name: nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - flask_app
+    command: /bin/sh -c "envsubst '$$FLASK_APP_URL' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    environment:
+      FLASK_APP_URL: flask_app

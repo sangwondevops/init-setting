@@ -1,0 +1,49 @@
+name: <ワークフロー名>
+
+on:
+# ➀手動実行の場合
+#   workflow_dispatch:
+#     #GitHubActionsの実行時にGUIからユーザに環境変数の入力を求める場合は以下を利用
+#     inputs:
+#       <変数名(ユーザ入力)>:
+#         description: '表示名'
+#         required: true
+
+# ➁自動実行(プルリクエスト)の場合
+#   pull_request:
+#   branches:
+#     #実行環境に応じてmainかstageを選択する。（stg環境：stg, prod環境: main）
+#     - main
+#     - stage
+#   paths: ['lib/**', 'bin/**', 'params/**'] #トリガー対象ファイル指定箇所
+
+# ➂自動実行(プッシュ)の場合
+#   push:
+#     branches: [ "main" ]
+
+# 環境変数
+env:
+  <変数名>: ${{ github.event.inputs.<変数名(ユーザ入力)> }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.<変数名(ユーザ入力)> }}
+          role-session-name: GitHubActions
+          aws-region: ap-northeast-1
+
+      # - name: <動作名>
+      #  run: |
+      #~以下に動作内容を追記する~

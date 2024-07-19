@@ -1,0 +1,22 @@
+{
+  "executionRoleArn": "<EcsTaskExecutionRoleArn>",
+  "containerDefinitions": [
+    {
+      "name": "EcsApp",
+      "image": "<IMAGE1_NAME>",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "memory": "512",
+  "family": "<EcsTask>"
+}

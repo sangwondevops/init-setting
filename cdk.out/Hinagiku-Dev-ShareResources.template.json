@@ -1,0 +1,2238 @@
+{
+  "Resources": {
+    "HinagikuDevAlarmSNSTopic2D377A7A": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Alarm/SNSTopic/Resource"
+      }
+    },
+    "HinagikuDevAlarmSNSTopicPolicy423F52D9": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudwatch.amazonaws.com"
+              },
+              "Resource": {
+                "Ref": "HinagikuDevAlarmSNSTopic2D377A7A"
+              },
+              "Sid": "0"
+            },
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              },
+              "Resource": {
+                "Ref": "HinagikuDevAlarmSNSTopic2D377A7A"
+              },
+              "Sid": "1"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Topics": [
+          {
+            "Ref": "HinagikuDevAlarmSNSTopic2D377A7A"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Alarm/SNSTopic/Policy/Resource"
+      }
+    },
+    "HinagikuDevCognitoCognitoUserPoolB6EDDC23": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true
+        },
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolTags": {
+          "Environment": "Dev"
+        },
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Cognito/CognitoUserPool/Resource"
+      }
+    },
+    "HinagikuDevAppKeyB9380A62": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "Description": "Custom KMS key",
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Encrypt*",
+                "kms:Decrypt*",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:Describe*"
+              ],
+              "Condition": {
+                "ArnLike": {
+                  "kms:EncryptionContext:aws:logs:arn": "arn:aws:logs:ap-northeast-1:019817421975:*"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "logs.ap-northeast-1.amazonaws.com"
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-AppKey/Key/Resource"
+      }
+    },
+    "HinagikuDevAppKeyAliasCF419585": {
+      "Type": "AWS::KMS::Alias",
+      "Properties": {
+        "AliasName": "alias/Hinagiku-Dev-AppKey-for-app",
+        "TargetKeyId": {
+          "Fn::GetAtt": ["HinagikuDevAppKeyB9380A62", "Arn"]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-AppKey/Key/Alias/Resource"
+      }
+    },
+    "HinagikuDevVpcD9D1577E": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.100.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Resource"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet1SubnetC48A08D5": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1a",
+        "CidrBlock": "10.100.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/Subnet"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet1RouteTable4AAA3C46": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/RouteTable"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet1RouteTableAssociationDB6BFEF1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1RouteTable4AAA3C46"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1SubnetC48A08D5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet1DefaultRouteA392F08D": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "HinagikuDevVpcIGW9CC07C99"
+        },
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1RouteTable4AAA3C46"
+        }
+      },
+      "DependsOn": ["HinagikuDevVpcVPCGWA5D27E55"],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet1EIP6D2D5B08": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/EIP"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet1NATGatewayBCE9DAFA": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "HinagikuDevVpcPublicSubnet1EIP6D2D5B08",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1SubnetC48A08D5"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "DependsOn": [
+        "HinagikuDevVpcPublicSubnet1DefaultRouteA392F08D",
+        "HinagikuDevVpcPublicSubnet1RouteTableAssociationDB6BFEF1"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/NATGateway"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet2Subnet379BFA3D": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1c",
+        "CidrBlock": "10.100.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/Subnet"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet2RouteTable15DEAB02": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/RouteTable"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet2RouteTableAssociationEE35670B": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPublicSubnet2RouteTable15DEAB02"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet2Subnet379BFA3D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet2DefaultRoute48F0E3CE": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "HinagikuDevVpcIGW9CC07C99"
+        },
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPublicSubnet2RouteTable15DEAB02"
+        }
+      },
+      "DependsOn": ["HinagikuDevVpcVPCGWA5D27E55"],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/DefaultRoute"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet2EIPC55A99E1": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/EIP"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet2NATGatewayB9DD3765": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "HinagikuDevVpcPublicSubnet2EIPC55A99E1",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet2Subnet379BFA3D"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "DependsOn": [
+        "HinagikuDevVpcPublicSubnet2DefaultRoute48F0E3CE",
+        "HinagikuDevVpcPublicSubnet2RouteTableAssociationEE35670B"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/NATGateway"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet3Subnet5EF28A22": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1d",
+        "CidrBlock": "10.100.2.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/Subnet"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet3RouteTable9F1340A5": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/RouteTable"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet3RouteTableAssociation8D2FC2B5": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPublicSubnet3RouteTable9F1340A5"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet3Subnet5EF28A22"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcPublicSubnet3DefaultRoute8B52DA4C": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "HinagikuDevVpcIGW9CC07C99"
+        },
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPublicSubnet3RouteTable9F1340A5"
+        }
+      },
+      "DependsOn": ["HinagikuDevVpcVPCGWA5D27E55"],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/DefaultRoute"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1a",
+        "CidrBlock": "10.100.4.0/22",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/Subnet"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet1RouteTable2BA4F3FD": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/RouteTable"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet1RouteTableAssociation76E834EB": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet1RouteTable2BA4F3FD"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet1DefaultRoute390E7C2D": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1NATGatewayBCE9DAFA"
+        },
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet1RouteTable2BA4F3FD"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet2Subnet3F216A0D": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1c",
+        "CidrBlock": "10.100.8.0/22",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/Subnet"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet2RouteTable83586D75": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/RouteTable"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet2RouteTableAssociation658204CD": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet2RouteTable83586D75"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet2Subnet3F216A0D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet2DefaultRoute3B85CA39": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "HinagikuDevVpcPublicSubnet2NATGatewayB9DD3765"
+        },
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet2RouteTable83586D75"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/DefaultRoute"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet3SubnetB1EA347B": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1d",
+        "CidrBlock": "10.100.12.0/22",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/Subnet"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet3RouteTable9C9B4315": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/RouteTable"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet3RouteTableAssociation58F9280E": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet3RouteTable9C9B4315"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet3SubnetB1EA347B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnet3DefaultRoute97BAE712": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1NATGatewayBCE9DAFA"
+        },
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet3RouteTable9C9B4315"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/DefaultRoute"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1a",
+        "CidrBlock": "10.100.16.0/22",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Protected"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1/Subnet"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet1RouteTableD7F79AC9": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1/RouteTable"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet1RouteTableAssociation7B486A7A": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcProtectedSubnet1RouteTableD7F79AC9"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1c",
+        "CidrBlock": "10.100.20.0/22",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Protected"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2/Subnet"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet2RouteTable261569BD": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2/RouteTable"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet2RouteTableAssociationC7315F94": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcProtectedSubnet2RouteTable261569BD"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "ap-northeast-1d",
+        "CidrBlock": "10.100.24.0/22",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Protected"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3/Subnet"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet3RouteTableD1173AAF": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3/RouteTable"
+      }
+    },
+    "HinagikuDevVpcProtectedSubnet3RouteTableAssociation7E1A6750": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "HinagikuDevVpcProtectedSubnet3RouteTableD1173AAF"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3/RouteTableAssociation"
+      }
+    },
+    "HinagikuDevVpcIGW9CC07C99": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/IGW"
+      }
+    },
+    "HinagikuDevVpcVPCGWA5D27E55": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "HinagikuDevVpcIGW9CC07C99"
+        },
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/VPCGW"
+      }
+    },
+    "HinagikuDevVpcFlowLogsFlowLog27F56684": {
+      "Type": "AWS::EC2::FlowLog",
+      "Properties": {
+        "LogDestination": {
+          "Fn::GetAtt": ["HinagikuDevVpcFlowLogBucket8A38985E", "Arn"]
+        },
+        "LogDestinationType": "s3",
+        "ResourceId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        },
+        "ResourceType": "VPC",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/FlowLogs"
+          }
+        ],
+        "TrafficType": "ALL"
+      },
+      "DependsOn": ["HinagikuDevVpcFlowLogBucketPolicyB3269CC1"],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/FlowLogs/FlowLog"
+      }
+    },
+    "HinagikuDevVpcS3EndpointForPrivate962B8731": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "RouteTableIds": [
+          {
+            "Ref": "HinagikuDevVpcPrivateSubnet1RouteTable2BA4F3FD"
+          },
+          {
+            "Ref": "HinagikuDevVpcPrivateSubnet2RouteTable83586D75"
+          },
+          {
+            "Ref": "HinagikuDevVpcPrivateSubnet3RouteTable9C9B4315"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1RouteTableD7F79AC9"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2RouteTable261569BD"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3RouteTableD1173AAF"
+          }
+        ],
+        "ServiceName": {
+          "Fn::Join": [
+            "",
+            [
+              "com.amazonaws.",
+              {
+                "Ref": "AWS::Region"
+              },
+              ".s3"
+            ]
+          ]
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/S3EndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcSsmEndpointForPrivateSecurityGroup011DC072": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmEndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmEndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcSsmEndpointForPrivateEDB0B8F1": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcSsmEndpointForPrivateSecurityGroup011DC072",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.ssm",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmEndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcSsmMessagesEndpointForPrivateSecurityGroupFA2662B1": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmMessagesEndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmMessagesEndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcSsmMessagesEndpointForPrivateC0D1EE77": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcSsmMessagesEndpointForPrivateSecurityGroupFA2662B1",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.ssmmessages",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmMessagesEndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcEc2EndpointForPrivateSecurityGroupC7A36FDE": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2EndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2EndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcEc2EndpointForPrivate23D9E8A9": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcEc2EndpointForPrivateSecurityGroupC7A36FDE",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.ec2",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2EndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcEc2MessagesEndpointForPrivateSecurityGroup8AC06099": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2MessagesEndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2MessagesEndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcEc2MessagesEndpointForPrivate26089193": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcEc2MessagesEndpointForPrivateSecurityGroup8AC06099",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.ec2messages",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2MessagesEndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcEcrDkrEndpointForPrivateSecurityGroupC5B6524D": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrDkrEndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrDkrEndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcEcrDkrEndpointForPrivateBA84E10C": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcEcrDkrEndpointForPrivateSecurityGroupC5B6524D",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.ecr.dkr",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrDkrEndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcEcrEndpointForPrivateSecurityGroup3ED9E6BA": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrEndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrEndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcEcrEndpointForPrivateDE7D4ACF": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcEcrEndpointForPrivateSecurityGroup3ED9E6BA",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.ecr.api",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrEndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcLogsEndpointForPrivateSecurityGroup3A5C1197": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/LogsEndpointForPrivate/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": ["HinagikuDevVpcD9D1577E", "CidrBlock"]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/LogsEndpointForPrivate/SecurityGroup/Resource"
+      }
+    },
+    "HinagikuDevVpcLogsEndpointForPrivateB9DD50B3": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "HinagikuDevVpcLogsEndpointForPrivateSecurityGroup3A5C1197",
+              "GroupId"
+            ]
+          }
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.logs",
+        "SubnetIds": [
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          },
+          {
+            "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/LogsEndpointForPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcPublicSubnetParam099746F21": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "PublicSubnet-0",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevVpcPublicSubnet1SubnetC48A08D5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PublicSubnetParam0/Resource"
+      }
+    },
+    "HinagikuDevVpcPublicSubnetParam194536B99": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "PublicSubnet-1",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevVpcPublicSubnet2Subnet379BFA3D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PublicSubnetParam1/Resource"
+      }
+    },
+    "HinagikuDevVpcPublicSubnetParam25D88B4A7": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "PublicSubnet-2",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevVpcPublicSubnet3Subnet5EF28A22"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PublicSubnetParam2/Resource"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnetParam09D26119C": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "PrivateSubnet-0",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PrivateSubnetParam0/Resource"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnetParam1A4ACAF7B": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "PrivateSubnet-1",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevVpcPrivateSubnet2Subnet3F216A0D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PrivateSubnetParam1/Resource"
+      }
+    },
+    "HinagikuDevVpcPrivateSubnetParam2B8598D1C": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": "PrivateSubnet-2",
+        "Tags": {
+          "Environment": "Dev"
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "HinagikuDevVpcPrivateSubnet3SubnetB1EA347B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PrivateSubnetParam2/Resource"
+      }
+    },
+    "HinagikuDevVpcKey9E0C5783": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "Description": "for VPC Flow log",
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::019817421975:root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Encrypt*",
+                "kms:Decrypt*",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:Describe*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "delivery.logs.amazonaws.com"
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Key/Resource"
+      }
+    },
+    "HinagikuDevVpcKeyAlias53091BB5": {
+      "Type": "AWS::KMS::Alias",
+      "Properties": {
+        "AliasName": "alias/Hinagiku-Dev-Vpc-for-flowlog",
+        "TargetKeyId": {
+          "Fn::GetAtt": ["HinagikuDevVpcKey9E0C5783", "Arn"]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Key/Alias/Resource"
+      }
+    },
+    "HinagikuDevVpcFlowLogBucket8A38985E": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": ["HinagikuDevVpcKey9E0C5783", "Arn"]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/FlowLogBucket/Resource"
+      }
+    },
+    "HinagikuDevVpcFlowLogBucketPolicyB3269CC1": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevVpcFlowLogBucket8A38985E"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": ["HinagikuDevVpcFlowLogBucket8A38985E", "Arn"]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevVpcFlowLogBucket8A38985E",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/FlowLogBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPublicB100D741": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPublicDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet1D7E0AC6DD0FC573A": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPublicB100D741"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet1SubnetC48A08D5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet1D7E0AC6D/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPublicDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet286BE06A82018C43E": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPublicB100D741"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet2Subnet379BFA3D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet286BE06A8/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPublicDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet35C10B0F2E89CEEFF": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPublicB100D741"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPublicSubnet3Subnet5EF28A22"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet35C10B0F2/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPublicNaclEgressPublic23D85CD0": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": true,
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPublicB100D741"
+        },
+        "Protocol": -1,
+        "RuleAction": "allow",
+        "RuleNumber": 100
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/NaclEgressPublic/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPublicNaclIngressPublicCC556923": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": false,
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPublicB100D741"
+        },
+        "Protocol": -1,
+        "RuleAction": "allow",
+        "RuleNumber": 100
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/NaclIngressPublic/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPrivate063FEF0C": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          },
+          {
+            "Key": "Name",
+            "Value": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate"
+          }
+        ],
+        "VpcId": {
+          "Ref": "HinagikuDevVpcD9D1577E"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPrivateDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet1D98EE8693A386528": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPrivate063FEF0C"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet1D98EE869/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPrivateDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet25C5602A750D5FEF0": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPrivate063FEF0C"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet2Subnet3F216A0D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet25C5602A7/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPrivateDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet3C784DF820BD0D437": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPrivate063FEF0C"
+        },
+        "SubnetId": {
+          "Ref": "HinagikuDevVpcPrivateSubnet3SubnetB1EA347B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet3C784DF82/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPrivateNaclEgressPrivate08817CDA": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": true,
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPrivate063FEF0C"
+        },
+        "Protocol": -1,
+        "RuleAction": "allow",
+        "RuleNumber": 100
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/NaclEgressPrivate/Resource"
+      }
+    },
+    "HinagikuDevVpcNaclPrivateNaclIngressPrivate568FE630": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": false,
+        "NetworkAclId": {
+          "Ref": "HinagikuDevVpcNaclPrivate063FEF0C"
+        },
+        "Protocol": -1,
+        "RuleAction": "allow",
+        "RuleNumber": 120
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/NaclIngressPrivate/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/32S326CMBTGn8X72ik+ATPOmC2OqPN2KfXoKtBD2lMJIbz70oKgu9gN5/t+/Xr6h0Z8Hi34bCIqO5WnbJqrlDd7EjJjorLfjdWWNwcslWTLs+5E+CaYK1kPsLMtk3jRipA3XxZMgpj7xF23LCssb94hzPMlzpWw3gTRMpARb45lWOyYLFni0lzJvUs1kGej2qEjOIg0h5GPLLYWpRKkUA9hL1abxJetoLUgqETNEqNugmBsvNEERsMQ6HbSu5hIyJ8CNLG3HKsPvPjxu+xDx1Ku9KlEpamfPdjQ/CwkPGb2IJ1RVK8NujKc5glsgSo0WSzDXT64bs8j+HPo/4ZHutJk6ufGAbXM2sI/BaP0JRFGFEBgfHAwLbML3rw6mXU316uujO/j0betJ5+OSkdsBxadkeHH3HXLNJ6AX+3LLZrx+ZzPJler1NQ4TaoAvuvqL8jSe863AgAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-ShareResources/CDKMetadata/Default"
+      }
+    }
+  },
+  "Outputs": {
+    "ExportsOutputRefHinagikuDevAppKeyB9380A62E17512A0": {
+      "Value": {
+        "Ref": "HinagikuDevAppKeyB9380A62"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAppKeyB9380A62E17512A0"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9": {
+      "Value": {
+        "Ref": "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC": {
+      "Value": {
+        "Ref": "HinagikuDevVpcPrivateSubnet2Subnet3F216A0D"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22": {
+      "Value": {
+        "Ref": "HinagikuDevVpcPrivateSubnet3SubnetB1EA347B"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67": {
+      "Value": {
+        "Ref": "HinagikuDevVpcD9D1577E"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+      }
+    },
+    "ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178": {
+      "Value": {
+        "Ref": "HinagikuDevAlarmSNSTopic2D377A7A"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+      }
+    },
+    "ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B": {
+      "Value": {
+        "Fn::GetAtt": ["HinagikuDevAppKeyB9380A62", "Arn"]
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcProtectedSubnet1Subnet20A4E4F543808CB5": {
+      "Value": {
+        "Ref": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet1Subnet20A4E4F543808CB5"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcProtectedSubnet2Subnet6CB636EB8A56621E": {
+      "Value": {
+        "Ref": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet2Subnet6CB636EB8A56621E"
+      }
+    },
+    "ExportsOutputRefHinagikuDevVpcProtectedSubnet3SubnetF4BE363A1C1EC14A": {
+      "Value": {
+        "Ref": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+      },
+      "Export": {
+        "Name": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet3SubnetF4BE363A1C1EC14A"
+      }
+    },
+    "HinagikuDevVpcsubnetID26D3817C": {
+      "Value": {
+        "Ref": "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  ["1", "2", "3", "4", "5"],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

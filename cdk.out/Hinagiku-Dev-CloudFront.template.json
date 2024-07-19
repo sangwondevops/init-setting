@@ -1,0 +1,545 @@
+{
+  "Resources": {
+    "HinagikuDevCloudFrontWebBucket4325040A": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/WebBucket/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontWebBucketPolicy48D8356B": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevCloudFrontWebBucket4325040A"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevCloudFrontWebBucket4325040A",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevCloudFrontWebBucket4325040A",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "CanonicalUser": {
+                  "Fn::GetAtt": [
+                    "HinagikuDevCloudFrontDistributionOrigin2S3Origin0C80D8E1",
+                    "S3CanonicalUserId"
+                  ]
+                }
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "HinagikuDevCloudFrontWebBucket4325040A",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/WebBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontClosedBucket5A0F400C": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/ClosedBucket/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontClosedBucketPolicy61B55F93": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevCloudFrontClosedBucket5A0F400C"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevCloudFrontClosedBucket5A0F400C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevCloudFrontClosedBucket5A0F400C",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/ClosedBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontCloudFrontLogBucket1402DB9D": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/CloudFrontLogBucket/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontCloudFrontLogBucketPolicy8FCA906E": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "HinagikuDevCloudFrontCloudFrontLogBucket1402DB9D"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "HinagikuDevCloudFrontCloudFrontLogBucket1402DB9D",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "HinagikuDevCloudFrontCloudFrontLogBucket1402DB9D",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/CloudFrontLogBucket/Policy/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontDistributionOrigin2S3Origin0C80D8E1": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "Identity for HinagikuDevCloudFrontDistributionOrigin220B7E66C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/Distribution/Origin2/S3Origin/Resource"
+      }
+    },
+    "HinagikuDevCloudFrontDistribution9777C317": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "CacheBehaviors": [
+            {
+              "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+              "Compress": true,
+              "PathPattern": "/static/*",
+              "TargetOriginId": "HinagikuDevCloudFrontDistributionOrigin220B7E66C",
+              "ViewerProtocolPolicy": "redirect-to-https"
+            }
+          ],
+          "CustomErrorResponses": [
+            {
+              "ErrorCachingMinTTL": 20,
+              "ErrorCode": 403,
+              "ResponseCode": 403,
+              "ResponsePagePath": "/static/sorry.html"
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PUT",
+              "PATCH",
+              "POST",
+              "DELETE"
+            ],
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+            "Compress": true,
+            "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+            "TargetOriginId": "HinagikuDevCloudFrontDistributionOrigin15FB9A734",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "DefaultRootObject": "",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Logging": {
+            "Bucket": {
+              "Fn::GetAtt": [
+                "HinagikuDevCloudFrontCloudFrontLogBucket1402DB9D",
+                "RegionalDomainName"
+              ]
+            },
+            "IncludeCookies": true,
+            "Prefix": "CloudFrontAccessLogs/"
+          },
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "http-only",
+                "OriginSSLProtocols": ["TLSv1.2"]
+              },
+              "DomainName": {
+                "Fn::ImportValue": "Hinagiku-Dev-Ecs:ExportsOutputFnGetAttHinagikuDevAlb9B09859EDNSName0FC0250C"
+              },
+              "Id": "HinagikuDevCloudFrontDistributionOrigin15FB9A734"
+            },
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "HinagikuDevCloudFrontWebBucket4325040A",
+                  "RegionalDomainName"
+                ]
+              },
+              "Id": "HinagikuDevCloudFrontDistributionOrigin220B7E66C",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "HinagikuDevCloudFrontDistributionOrigin2S3Origin0C80D8E1"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "WebACLId": {
+            "Fn::GetAtt": [
+              "ExportsReader8B249524",
+              "/cdk/exports/Hinagiku-Dev-CloudFront/HinagikuDevWafuseast1FnGetAttHinagikuDevWafWebAclArn4A1517FB"
+            ]
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Hinagiku-Dev-CloudFront/Distribution/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WOzQrCMBCEn8V7uvbnCbQieFLqA0i7SWXbmkB2Y5GSd5daRS+eZnaYb5kcsryAdFWPnKDuk4EamM5SY68qwy54NKoe+TJxAdM2YG9Ela19u0VObiB8fOPljgoHF3TrnRWYdsTiqQlCzqqjpyvZDaJhPmhjheSFlzOwn4F/jd83Mc7JZ2VU1mkDHa/veQpZBumqY6LEByt0M1At+gRXqvl98AAAAA=="
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/CDKMetadata/Default"
+      }
+    },
+    "ExportsReader8B249524": {
+      "Type": "Custom::CrossRegionExportReader",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68",
+            "Arn"
+          ]
+        },
+        "ReaderProps": {
+          "region": "ap-northeast-1",
+          "prefix": "Hinagiku-Dev-CloudFront",
+          "imports": {
+            "/cdk/exports/Hinagiku-Dev-CloudFront/HinagikuDevWafuseast1FnGetAttHinagikuDevWafWebAclArn4A1517FB": "{{resolve:ssm:/cdk/exports/Hinagiku-Dev-CloudFront/HinagikuDevWafuseast1FnGetAttHinagikuDevWafWebAclArn4A1517FB}}"
+          }
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/ExportsReader/Resource/Default"
+      }
+    },
+    "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyName": "Inline",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:ap-northeast-1:019817421975:parameter/cdk/exports/Hinagiku-Dev-CloudFront/*"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "ssm:AddTagsToResource",
+                    "ssm:RemoveTagsFromResource",
+                    "ssm:GetParameters"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Custom::CrossRegionExportReaderCustomResourceProvider/Role"
+      }
+    },
+    "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-019817421975-ap-northeast-1",
+          "S3Key": "e72e707870c336971ab7edc78222966e07384ecaa2af26b78e930ecdd37fc088.zip"
+        },
+        "Timeout": 900,
+        "MemorySize": 128,
+        "Handler": "__entrypoint__.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x"
+      },
+      "DependsOn": [
+        "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-CloudFront/Custom::CrossRegionExportReaderCustomResourceProvider/Handler",
+        "aws:asset:path": "asset.e72e707870c336971ab7edc78222966e07384ecaa2af26b78e930ecdd37fc088",
+        "aws:asset:property": "Code"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  ["1", "2", "3", "4", "5"],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

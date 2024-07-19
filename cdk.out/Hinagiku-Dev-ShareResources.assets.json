@@ -1,0 +1,20 @@
+{
+  "version": "36.0.0",
+  "files": {
+    "514c3209413555a0a3f714b5f868ea0aec17fd6658325ebaf0304a7d9aa74d1c": {
+      "source": {
+        "path": "Hinagiku-Dev-ShareResources.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "019817421975-ap-northeast-1": {
+          "bucketName": "cdk-hnb659fds-assets-019817421975-ap-northeast-1",
+          "objectKey": "514c3209413555a0a3f714b5f868ea0aec17fd6658325ebaf0304a7d9aa74d1c.json",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-file-publishing-role-019817421975-ap-northeast-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

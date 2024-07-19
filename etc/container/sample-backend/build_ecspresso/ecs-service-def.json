@@ -1,0 +1,63 @@
+{
+  "capacityProviderStrategy": [
+    {
+      "base": 0,
+      "capacityProvider": "FARGATE",
+      "weight": 1
+    }
+  ],
+  "deploymentConfiguration": {
+    "deploymentCircuitBreaker": {
+      "enable": false,
+      "rollback": false
+    },
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 50
+  },
+  "deploymentController": {
+    "type": "ECS"
+  },
+  "desiredCount": 2,
+  "enableECSManagedTags": false,
+  "enableExecuteCommand": false,
+  "launchType": "",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "assignPublicIp": "DISABLED",
+      "securityGroups": ["{{ must_env `SECURITY_GROUP` }}"],
+      "subnets": [
+        "{{ must_env `SUBNET_1` }}",
+        "{{ must_env `SUBNET_2` }}",
+        "{{ must_env `SUBNET_3` }}"
+      ]
+    }
+  },
+  "pendingCount": 0,
+  "platformFamily": "Linux",
+  "platformVersion": "LATEST",
+  "propagateTags": "NONE",
+  "runningCount": 0,
+  "schedulingStrategy": "REPLICA",
+  "serviceConnectConfiguration": {
+    "enabled": true,
+    "namespace": "{{ must_env `NAMESPACE` }}",
+    "services": [
+      {
+        "portName": "backend",
+        "clientAliases": [
+          {
+            "port": 8080
+          }
+        ]
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "{{ must_env `LOG_GROUP_SERVICE_CONNECT` }}",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    }
+  }
+}

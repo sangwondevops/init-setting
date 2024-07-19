@@ -1,0 +1,1748 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "Hinagiku-Dev-ShareResources.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "Hinagiku-Dev-ShareResources.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "Hinagiku-Dev-ShareResources": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://019817421975/ap-northeast-1",
+      "properties": {
+        "templateFile": "Hinagiku-Dev-ShareResources.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "Dev"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-deploy-role-019817421975-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-cfn-exec-role-019817421975-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-019817421975-ap-northeast-1/514c3209413555a0a3f714b5f868ea0aec17fd6658325ebaf0304a7d9aa74d1c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": ["Hinagiku-Dev-ShareResources.assets"],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-lookup-role-019817421975-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": ["Hinagiku-Dev-ShareResources.assets"],
+      "metadata": {
+        "/Hinagiku-Dev-ShareResources": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "Dev"
+              }
+            ]
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Alarm/SNSTopic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevAlarmSNSTopic2D377A7A"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Alarm/SNSTopic/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevAlarmSNSTopicPolicy423F52D9"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Cognito/CognitoUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevCognitoCognitoUserPoolB6EDDC23"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-AppKey/Key/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevAppKeyB9380A62"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-AppKey/Key/Alias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevAppKeyAliasCF419585"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevAppKeyB9380A62\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevAppKeyB9380A62E17512A0"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcPrivateSubnet1Subnet3983C5B5\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcPrivateSubnet1Subnet3983C5B5D14873C9"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcPrivateSubnet2Subnet3F216A0D\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcPrivateSubnet2Subnet3F216A0D0A99A1EC"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcPrivateSubnet3SubnetB1EA347B\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcPrivateSubnet3SubnetB1EA347B544E8A22"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcD9D1577E\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevAlarmSNSTopic2D377A7A\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Fn::GetAtt\":[\"HinagikuDevAppKeyB9380A62\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcProtectedSubnet1Subnet20A4E4F543808CB5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcProtectedSubnet2Subnet6CB636EB\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcProtectedSubnet2Subnet6CB636EB8A56621E"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Exports/Output{\"Ref\":\"HinagikuDevVpcProtectedSubnet3SubnetF4BE363A\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefHinagikuDevVpcProtectedSubnet3SubnetF4BE363A1C1EC14A"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcD9D1577E"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet1SubnetC48A08D5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet1RouteTable4AAA3C46"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet1RouteTableAssociationDB6BFEF1"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet1DefaultRouteA392F08D"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet1EIP6D2D5B08"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet1NATGatewayBCE9DAFA"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet2Subnet379BFA3D"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet2RouteTable15DEAB02"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet2RouteTableAssociationEE35670B"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet2DefaultRoute48F0E3CE"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet2EIPC55A99E1"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet2/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet2NATGatewayB9DD3765"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet3Subnet5EF28A22"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet3RouteTable9F1340A5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet3RouteTableAssociation8D2FC2B5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PublicSubnet3/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnet3DefaultRoute8B52DA4C"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet1Subnet3983C5B5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet1RouteTable2BA4F3FD"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet1RouteTableAssociation76E834EB"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet1DefaultRoute390E7C2D"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet2Subnet3F216A0D"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet2RouteTable83586D75"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet2RouteTableAssociation658204CD"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet2DefaultRoute3B85CA39"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet3SubnetB1EA347B"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet3RouteTable9C9B4315"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet3RouteTableAssociation58F9280E"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/PrivateSubnet3/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnet3DefaultRoute97BAE712"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet1Subnet20A4E4F5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet1RouteTableD7F79AC9"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet1RouteTableAssociation7B486A7A"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet2Subnet6CB636EB"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet2RouteTable261569BD"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet2RouteTableAssociationC7315F94"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet3SubnetF4BE363A"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet3RouteTableD1173AAF"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/ProtectedSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcProtectedSubnet3RouteTableAssociation7E1A6750"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcIGW9CC07C99"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcVPCGWA5D27E55"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/FlowLogs/FlowLog": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcFlowLogsFlowLog27F56684"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/S3EndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcS3EndpointForPrivate962B8731"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmEndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcSsmEndpointForPrivateSecurityGroup011DC072"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmEndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcSsmEndpointForPrivateEDB0B8F1"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmMessagesEndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcSsmMessagesEndpointForPrivateSecurityGroupFA2662B1"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/SsmMessagesEndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcSsmMessagesEndpointForPrivateC0D1EE77"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2EndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEc2EndpointForPrivateSecurityGroupC7A36FDE"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2EndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEc2EndpointForPrivate23D9E8A9"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2MessagesEndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEc2MessagesEndpointForPrivateSecurityGroup8AC06099"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/Ec2MessagesEndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEc2MessagesEndpointForPrivate26089193"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrDkrEndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEcrDkrEndpointForPrivateSecurityGroupC5B6524D"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrDkrEndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEcrDkrEndpointForPrivateBA84E10C"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrEndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEcrEndpointForPrivateSecurityGroup3ED9E6BA"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/EcrEndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcEcrEndpointForPrivateDE7D4ACF"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/LogsEndpointForPrivate/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcLogsEndpointForPrivateSecurityGroup3A5C1197"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Vpc/LogsEndpointForPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcLogsEndpointForPrivateB9DD50B3"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PublicSubnetParam0/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnetParam099746F21"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PublicSubnetParam1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnetParam194536B99"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PublicSubnetParam2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPublicSubnetParam25D88B4A7"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PrivateSubnetParam0/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnetParam09D26119C"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PrivateSubnetParam1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnetParam1A4ACAF7B"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/PrivateSubnetParam2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcPrivateSubnetParam2B8598D1C"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Key/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcKey9E0C5783"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/Key/Alias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcKeyAlias53091BB5"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/FlowLogBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcFlowLogBucket8A38985E"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/FlowLogBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcFlowLogBucketPolicyB3269CC1"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPublicB100D741"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet1D7E0AC6D/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPublicDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet1D7E0AC6DD0FC573A"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet286BE06A8/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPublicDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet286BE06A82018C43E"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet35C10B0F2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPublicDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPublicSubnet35C10B0F2E89CEEFF"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/NaclEgressPublic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPublicNaclEgressPublic23D85CD0"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPublic/NaclIngressPublic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPublicNaclIngressPublicCC556923"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPrivate063FEF0C"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet1D98EE869/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPrivateDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet1D98EE8693A386528"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet25C5602A7/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPrivateDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet25C5602A750D5FEF0"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/DefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet3C784DF82/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPrivateDefaultAssociationHinagikuDevShareResourcesHinagikuDevVpcPrivateSubnet3C784DF820BD0D437"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/NaclEgressPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPrivateNaclEgressPrivate08817CDA"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/NaclPrivate/NaclIngressPrivate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcNaclPrivateNaclIngressPrivate568FE630"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/Hinagiku-Dev-Vpc/subnetID": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevVpcsubnetID26D3817C"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/Hinagiku-Dev-ShareResources/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "Hinagiku-Dev-ShareResources"
+    },
+    "Hinagiku-Dev-Ecs.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "Hinagiku-Dev-Ecs.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "Hinagiku-Dev-Ecs": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://019817421975/ap-northeast-1",
+      "properties": {
+        "templateFile": "Hinagiku-Dev-Ecs.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "Dev"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-deploy-role-019817421975-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-cfn-exec-role-019817421975-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-019817421975-ap-northeast-1/4a1aab8ac642ec0b8f0023f678e846c3c527454d5d8b06ec6ce6a4c2ef9e9c41.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": ["Hinagiku-Dev-Ecs.assets"],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-lookup-role-019817421975-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "Hinagiku-Dev-ShareResources",
+        "Hinagiku-Dev-Ecs.assets"
+      ],
+      "metadata": {
+        "/Hinagiku-Dev-Ecs": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "Dev"
+              }
+            ]
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/LambdaSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaSecurityGroup0BD9FC99"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/EcsTaskExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleAE8EC4AE"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/EcsTaskExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonEcsTaskExecutionRoleDefaultPolicyA7CF3192"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/Cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonClusterE3950829"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/Cluster/Cluster": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonCluster61F1C561"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/ECSServiceActionEventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonECSServiceActionEventRule2F717DCD"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/ECSServiceDeploymentEventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonECSServiceDeploymentEventRule62849BD0"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/executionRoleArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonexecutionRoleArn88043E05"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsCommon/clusterName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsCommonclusterName7CEAB9AE"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppCloudMapNamespace1EA289D01"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/BackendService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppCloudMapNamespace1BackendService0906A2D0"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/FrontendService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppCloudMapNamespace1FrontendService22EE104E"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/Namespace-1/AuthService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppCloudMapNamespace1AuthServiceA6D4B219"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/lambdaApp-serviceId/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppCloudMaplambdaAppserviceIdACDCD52B"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/CloudMap/lambdaApp-namespace/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppCloudMaplambdaAppnamespace7C42AB9C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/NamespaceId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppNamespaceIdB2E60C7D"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Repo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoC722D59F"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Repo/ImageScanComplete/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesRepoImageScanComplete16038C9C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSg2FD2B361"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/Log/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesLog39879762"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/FargateCpuUtil/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesFargateCpuUtil3074902C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Ecs-Resources/EcsAppRepository/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesEcsAppRepository6EC706C6"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/PipelineSourceBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucket727A7C8A"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/PipelineSourceBucket/Notifications/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineSourceBucketNotifications552F117C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/DeployProject/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDF1D5D42"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/DeployProject/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProjectRoleDefaultPolicy65F88469"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/DeployProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployProject23F989F9"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketE795C22E"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineArtifactsBucketPolicy60716C4F"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRole4582E212"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineRoleDefaultPolicy7B50232A"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipeline0C815F80"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRole1DC1FAA2"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicy8B301646"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRole41B6BD9D"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicy660B1D54"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/EventsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRole683E0367"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEventsRoleDefaultPolicyFB34BDCA"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/PipelineTriggerEventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelinePipelineTriggerEventRuleC36E9F65"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsApp-FrontApp-Pipeline/EcsAppTriggerBucketName/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsAppFrontAppPipelineEcsAppTriggerBucketName82B5A04A"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Repo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoCE5391E0"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Repo/ImageScanComplete/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesRepoImageScanComplete04EA7010"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg/from HinagikuDevEcsLambdaSecurityGroup00DF9693:5000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgfromHinagikuDevEcsLambdaSecurityGroup00DF96935000499A2C72"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Sg/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSgB3811A78:5000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsAppFrontAppEcsResourcesSgB3811A785000CA78FC68"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/Log/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesLogE7E6E456"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/FargateCpuUtil/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesFargateCpuUtil557F995D"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Ecs-Resources/EcsBackendRepository/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesEcsBackendRepositoryCEDE254F"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/BackendTaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppBackendTaskRole1560353E"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/PipelineSourceBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucket3FF73629"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/PipelineSourceBucket/Notifications/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineSourceBucketNotifications558FF021"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/DeployProject/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleA1457208"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/DeployProject/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProjectRoleDefaultPolicy6E43A574"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/DeployProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployProject99D62952"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucket910280C6"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineArtifactsBucketPolicy9B23657C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRole78BB2B64"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineRoleDefaultPolicy4443FD63"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipeline91737D3D"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRole386A854C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicyF0EFF955"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRole0F62154B"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicyBBBF2CD0"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/EventsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRole14EBE38C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEventsRoleDefaultPolicyBEC5C51D"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/PipelineTriggerEventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelinePipelineTriggerEventRule13F7953B"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-EcsBackend-BackApp-Pipeline/EcsBackendTriggerBucketName/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevEcsBackendBackAppPipelineEcsBackendTriggerBucketName3E52E040"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Repo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoB0C14D5B"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Repo/ImageScanComplete/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesRepoImageScanComplete4F3C5B88"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesSg0851ED99"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Sg/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:8000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesSgfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC32380005B92832A"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/Log/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesLog22FAA9D9"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/FargateCpuUtil/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesFargateCpuUtil7B3A5E9F"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-Auth-Ecs-Resources/AuthenticateRepository/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthEcsResourcesAuthenticateRepository9BAB3E38"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/AuthTaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppAuthTaskRoleC6B9C9E6"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/PipelineSourceBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketAC4DD15C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/PipelineSourceBucket/Notifications/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineSourceBucketNotifications25F0C0DA"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/DeployProject/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRole2FD2F28F"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/DeployProject/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectRoleDefaultPolicy8FEBE921"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/DeployProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployProjectBC9B5F74"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketA659F9CB"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineArtifactsBucketPolicy7F8420AC"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleFEA6147C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineRoleDefaultPolicyC83A48E9"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDFB42D23"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleD8297BAA"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicy82958EBC"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRole6948A030"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicy051E8319"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/EventsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRole1F24ABB2"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineEventsRoleDefaultPolicyA05E0210"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/PipelineTriggerEventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelinePipelineTriggerEventRuleF0371831"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-EcsApp/Hinagiku-Dev-Authenticate-AuthApp-Pipeline/AuthenticateTriggerBucketName/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevEcsAppHinagikuDevAuthenticateAuthAppPipelineAuthenticateTriggerBucketNameF1C52196"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/ExportEcsAppRepositoryName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportEcsAppRepositoryName"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/ExportsourceBucket-EcsApp": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsourceBucketEcsApp"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/ExportEcsBackendRepositoryName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportEcsBackendRepositoryName"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/ExportsourceBucket-EcsBackend": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsourceBucketEcsBackend"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/ExportAuthenticateRepositoryName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportAuthenticateRepositoryName"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/ExportsourceBucket-Authenticate": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsourceBucketAuthenticate"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Lambda_policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppLambdapolicy986307D9"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Frontend-Role-Hinagiku-Dev/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppFrontendRoleHinagikuDev4108348C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Frontend-Role-Hinagiku-Dev/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppFrontendRoleHinagikuDevDefaultPolicy24317175"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/CodeBuildRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRole1C487DC1"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/CodeBuildRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodeBuildRoleDefaultPolicyDC55E631"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/CodePipelineRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineCodePipelineRole009D64A5"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/PipelineSourceBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucket69C0A61C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/PipelineSourceBucket/Notifications/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineSourceBucketNotificationsE17B7D03"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/DeployProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployProjectC6A32F96"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/SourceBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceBucketName5B5D9552"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketAAF74F02"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineArtifactsBucketPolicyB9077346"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRole8E085BDD"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineRoleDefaultPolicyA0789FDB"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineC5FED916"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRole6F2BF6FA"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Source/SourceBucket/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineSourceSourceBucketCodePipelineActionRoleDefaultPolicyFDFECC14"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDF4A481C"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/Deploy/DeployProject/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineDeployDeployProjectCodePipelineActionRoleDefaultPolicyCBF2924A"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/EventsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleA7BC844E"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Pipeline/EventsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineEventsRoleDefaultPolicyEA564BCA"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/PipelineTriggerEventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelinePipelineTriggerEventRule3FCBCFDB"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Lambda--Lambda-SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineLambdaLambdaSecurityGroup3E0055D2"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Lambda-Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineLambdaRole3E300F1B"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Hinagiku-Dev-LambdaApp/Hinagiku-Dev-FrontApp-Pipeline/Lambda-TriggerBucketName/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevLambdaAppHinagikuDevFrontAppPipelineLambdaTriggerBucketNameFCBD85DE"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/Exports/Output{\"Fn::GetAtt\":[\"HinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45\",\"GroupId\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45GroupId4CE95B61"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/Hinagiku-Dev-Ecs/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "Hinagiku-Dev-Ecs"
+    },
+    "Hinagiku-Dev-Aurora.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "Hinagiku-Dev-Aurora.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "Hinagiku-Dev-Aurora": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://019817421975/ap-northeast-1",
+      "properties": {
+        "templateFile": "Hinagiku-Dev-Aurora.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "Dev"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-deploy-role-019817421975-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-cfn-exec-role-019817421975-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-019817421975-ap-northeast-1/bb2c928acbab19e510d094e8753dc3e79ff3dccb519a03ca7ab1cfb546e117fe.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": ["Hinagiku-Dev-Aurora.assets"],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-lookup-role-019817421975-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "Hinagiku-Dev-ShareResources",
+        "Hinagiku-Dev-Ecs",
+        "Hinagiku-Dev-Aurora.assets"
+      ],
+      "metadata": {
+        "/Hinagiku-Dev-Aurora": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "Dev"
+              }
+            ]
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/AuroraClusterParameterGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraClusterParameterGroup22D979D8"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/AuroraInstanceParameterGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraInstanceParameterGroup79EAC8A3"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/Subnets/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraSubnetsC4DF45C9"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraSecurityGroup3440C66D"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/SecurityGroup/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:{IndirectPort}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraSecurityGroupfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323IndirectPortF4071FD9"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/Secret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HinagikuDevAuroraSecret84AB41E63fdaad7efa858a3daf9490cf0a702aeb"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/Secret/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraSecretAttachmentEAAB0558"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Aurora2CBAB212"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/LogRetentionpostgresql/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuroraLogRetentionpostgresqlBFB2AD06"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/writer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AurorawriterDC5BC759"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/Aurora/reader1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Aurorareader1C7647A85"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/RdsEventsCluster": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsEventsCluster"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/RdsEventsInstances": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsEventsInstances"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/Hinagiku-Dev-Aurora/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "Hinagiku-Dev-Aurora"
+    },
+    "Hinagiku-Dev-Redis.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "Hinagiku-Dev-Redis.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "Hinagiku-Dev-Redis": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://019817421975/ap-northeast-1",
+      "properties": {
+        "templateFile": "Hinagiku-Dev-Redis.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "Dev"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-deploy-role-019817421975-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-cfn-exec-role-019817421975-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-019817421975-ap-northeast-1/31ab14737da516d8e42473c5bcc86944ee1a345872b6fe25d7cc84c6bc418b6b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": ["Hinagiku-Dev-Redis.assets"],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::019817421975:role/cdk-hnb659fds-lookup-role-019817421975-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "Hinagiku-Dev-ShareResources",
+        "Hinagiku-Dev-Ecs",
+        "Hinagiku-Dev-Redis.assets"
+      ],
+      "metadata": {
+        "/Hinagiku-Dev-Redis": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "Dev"
+              }
+            ]
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedisSecret": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedisSecret"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedisLoggroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedisLoggroupFB0C3E33"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedisSecuritygGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedisSecuritygGroup20195709"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedisSecuritygGroup/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:6379": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedisSecuritygGroupfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC32363790DC713AD"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedisSubnetGroup": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedisSubnetGroup"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedisCustomParameterGroup": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedisCustomParameterGroup"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/ElastiCacheRedis": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ElastiCacheRedis"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/Hinagiku-Dev-Redis/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "Hinagiku-Dev-Redis"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

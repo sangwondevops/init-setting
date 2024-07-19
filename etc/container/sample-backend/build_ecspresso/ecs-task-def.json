@@ -1,0 +1,35 @@
+{
+  "containerDefinitions": [
+    {
+      "cpu": 0,
+      "dockerLabels": {},
+      "essential": true,
+      "image": "{{ must_env `IMAGE1_NAME` }}",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "{{ must_env `LOG_GROUP` }}",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "EcsBackend-"
+        }
+      },
+      "name": "EcsBackend",
+      "portMappings": [
+        {
+          "name": "backend",
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ],
+  "cpu": "256",
+  "executionRoleArn": "{{ must_env `EXECUTION_ROLE_ARN` }}",
+  "family": "{{ must_env `FAMILY` }}",
+  "ipcMode": "",
+  "memory": "512",
+  "networkMode": "awsvpc",
+  "pidMode": "",
+  "requiresCompatibilities": ["FARGATE"]
+}

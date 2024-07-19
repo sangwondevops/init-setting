@@ -1,0 +1,37 @@
+name: InfraResources_ExecutePipeline
+on:
+  push:
+    branches: ['マージ先ブランチ'] #branch名
+    paths: ['lib/**', 'bin/**', 'params/**'] #トリガー対象ファイル指定箇所
+
+env:
+  AWS_REGION: ap-northeast-1
+  PIPELINE_STACK_NAME: ProdBLEA-pipeline #デプロイ時に指定したPipeline名
+
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  aws-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout.
+        uses: actions/checkout@v4
+
+      - name: AWS Configure Credentials.
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{vars.infraresources_prod}} #「infraresources_」の後に環境名を入力
+          role-session-name: githubActionsAession
+
+      - name: Zip Repository
+        run: |
+          zip -r image.zip .
+      - name: Upload file to S3
+        run: |
+          S3_UPLOAD_BUCKET=`aws cloudformation describe-stacks \
+          --stack-name ${{ env.PIPELINE_STACK_NAME}} \
+          --query "Stacks[*].Outputs[? contains(OutputKey, 'SourceBucketName')].OutputValue" \
+          --output text`
+          `aws s3 cp image.zip s3://${S3_UPLOAD_BUCKET} --quiet`

@@ -1,0 +1,527 @@
+{
+  "Resources": {
+    "AuroraClusterParameterGroup22D979D8": {
+      "Type": "AWS::RDS::DBClusterParameterGroup",
+      "Properties": {
+        "Description": "Aurora-ClusterParameterGroup",
+        "Family": "aurora-postgresql15",
+        "Parameters": {
+          "timezone": "Asia/Tokyo",
+          "client_encoding": "UTF8"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/AuroraClusterParameterGroup/Resource"
+      }
+    },
+    "AuroraInstanceParameterGroup79EAC8A3": {
+      "Type": "AWS::RDS::DBParameterGroup",
+      "Properties": {
+        "Description": "Aurora-InstanceParameterGroup",
+        "Family": "aurora-postgresql15",
+        "Parameters": {
+          "shared_preload_libraries": "auto_explain,pg_stat_statements,pg_hint_plan,pgaudit",
+          "log_statement": "ddl",
+          "log_connections": "1",
+          "log_disconnections": "1",
+          "log_lock_waits": "1",
+          "log_min_duration_statement": "5000",
+          "auto_explain.log_min_duration": "5000",
+          "auto_explain.log_verbose": "1",
+          "log_rotation_age": "1440",
+          "log_rotation_size": "102400",
+          "rds.log_retention_period": "10080",
+          "random_page_cost": "1",
+          "track_activity_query_size": "16384",
+          "idle_in_transaction_session_timeout": "7200000",
+          "statement_timeout": "7200000",
+          "search_path": "\"$user\",public"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/AuroraInstanceParameterGroup/Resource"
+      }
+    },
+    "AuroraSubnetsC4DF45C9": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets for Aurora database",
+        "SubnetIds": [
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet1Subnet20A4E4F543808CB5"
+          },
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet2Subnet6CB636EB8A56621E"
+          },
+          {
+            "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcProtectedSubnet3SubnetF4BE363A1C1EC14A"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "AWSBackup",
+            "Value": "True"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/Subnets/Default"
+      }
+    },
+    "AuroraSecurityGroup3440C66D": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "AWSBackup",
+            "Value": "True"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevVpcD9D1577E6A6A4E67"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/SecurityGroup/Resource"
+      }
+    },
+    "AuroraSecurityGroupfromHinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323IndirectPortF4071FD9": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:{IndirectPort}",
+        "FromPort": {
+          "Fn::GetAtt": ["Aurora2CBAB212", "Endpoint.Port"]
+        },
+        "GroupId": {
+          "Fn::GetAtt": ["AuroraSecurityGroup3440C66D", "GroupId"]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::ImportValue": "Hinagiku-Dev-Ecs:ExportsOutputFnGetAttHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgD94F6A45GroupId4CE95B61"
+        },
+        "ToPort": {
+          "Fn::GetAtt": ["Aurora2CBAB212", "Endpoint.Port"]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/SecurityGroup/from HinagikuDevEcsHinagikuDevEcsAppHinagikuDevEcsBackendBackAppEcsResourcesSgE3BFC323:{IndirectPort}"
+      }
+    },
+    "HinagikuDevAuroraSecret84AB41E63fdaad7efa858a3daf9490cf0a702aeb": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Generated by the CDK for stack: ",
+              {
+                "Ref": "AWS::StackName"
+              }
+            ]
+          ]
+        },
+        "GenerateSecretString": {
+          "ExcludeCharacters": " %+~`#$&*()|[]{}:;<>?!'/@\"\\",
+          "GenerateStringKey": "password",
+          "PasswordLength": 30,
+          "SecretStringTemplate": "{\"username\":\"dbUser\"}"
+        },
+        "Tags": [
+          {
+            "Key": "AWSBackup",
+            "Value": "True"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/Secret/Resource"
+      }
+    },
+    "AuroraSecretAttachmentEAAB0558": {
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+      "Properties": {
+        "SecretId": {
+          "Ref": "HinagikuDevAuroraSecret84AB41E63fdaad7efa858a3daf9490cf0a702aeb"
+        },
+        "TargetId": {
+          "Ref": "Aurora2CBAB212"
+        },
+        "TargetType": "AWS::RDS::DBCluster"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/Secret/Attachment/Resource"
+      }
+    },
+    "Aurora2CBAB212": {
+      "Type": "AWS::RDS::DBCluster",
+      "Properties": {
+        "CopyTagsToSnapshot": true,
+        "DBClusterParameterGroupName": {
+          "Ref": "AuroraClusterParameterGroup22D979D8"
+        },
+        "DBSubnetGroupName": {
+          "Ref": "AuroraSubnetsC4DF45C9"
+        },
+        "DatabaseName": "mydbname",
+        "EnableCloudwatchLogsExports": ["postgresql"],
+        "Engine": "aurora-postgresql",
+        "EngineVersion": "15.4",
+        "KmsKeyId": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputFnGetAttHinagikuDevAppKeyB9380A62Arn4D2A9A1B"
+        },
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "HinagikuDevAuroraSecret84AB41E63fdaad7efa858a3daf9490cf0a702aeb"
+              },
+              ":SecretString:password::}}"
+            ]
+          ]
+        },
+        "MasterUsername": "dbUser",
+        "Port": 5432,
+        "ServerlessV2ScalingConfiguration": {
+          "MaxCapacity": 16,
+          "MinCapacity": 2
+        },
+        "StorageEncrypted": true,
+        "Tags": [
+          {
+            "Key": "AWSBackup",
+            "Value": "True"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ],
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": ["AuroraSecurityGroup3440C66D", "GroupId"]
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Snapshot",
+      "DeletionPolicy": "Snapshot",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/Resource"
+      }
+    },
+    "AuroraLogRetentionpostgresqlBFB2AD06": {
+      "Type": "Custom::LogRetention",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        },
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/rds/cluster/",
+              {
+                "Ref": "Aurora2CBAB212"
+              },
+              "/postgresql"
+            ]
+          ]
+        },
+        "RetentionInDays": 90
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/LogRetentionpostgresql/Resource"
+      }
+    },
+    "AurorawriterDC5BC759": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "CACertificateIdentifier": "rds-ca-rsa4096-g1",
+        "DBClusterIdentifier": {
+          "Ref": "Aurora2CBAB212"
+        },
+        "DBInstanceClass": "db.serverless",
+        "DBParameterGroupName": {
+          "Ref": "AuroraInstanceParameterGroup79EAC8A3"
+        },
+        "EnablePerformanceInsights": false,
+        "Engine": "aurora-postgresql",
+        "PromotionTier": 0,
+        "PubliclyAccessible": false,
+        "Tags": [
+          {
+            "Key": "AWSBackup",
+            "Value": "True"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/writer/Resource"
+      }
+    },
+    "Aurorareader1C7647A85": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "CACertificateIdentifier": "rds-ca-rsa4096-g1",
+        "DBClusterIdentifier": {
+          "Ref": "Aurora2CBAB212"
+        },
+        "DBInstanceClass": "db.serverless",
+        "DBParameterGroupName": {
+          "Ref": "AuroraInstanceParameterGroup79EAC8A3"
+        },
+        "EnablePerformanceInsights": false,
+        "Engine": "aurora-postgresql",
+        "PromotionTier": 1,
+        "PubliclyAccessible": false,
+        "Tags": [
+          {
+            "Key": "AWSBackup",
+            "Value": "True"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/Aurora/reader1/Resource"
+      }
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+      }
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Runtime": "nodejs18.x",
+        "Timeout": 900,
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-019817421975-ap-northeast-1",
+          "S3Key": "4e26bf2d0a26f2097fb2b261f22bb51e3f6b4b52635777b1e54edbd8e2d58c35.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+        "aws:asset:path": "asset.4e26bf2d0a26f2097fb2b261f22bb51e3f6b4b52635777b1e54edbd8e2d58c35",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "RdsEventsCluster": {
+      "Type": "AWS::RDS::EventSubscription",
+      "Properties": {
+        "Enabled": true,
+        "EventCategories": ["failure", "failover", "maintenance"],
+        "SnsTopicArn": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+        },
+        "SourceType": "db-cluster",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/RdsEventsCluster"
+      }
+    },
+    "RdsEventsInstances": {
+      "Type": "AWS::RDS::EventSubscription",
+      "Properties": {
+        "Enabled": true,
+        "EventCategories": [
+          "availability",
+          "configuration change",
+          "deletion",
+          "failover",
+          "failure",
+          "maintenance",
+          "notification",
+          "recovery"
+        ],
+        "SnsTopicArn": {
+          "Fn::ImportValue": "Hinagiku-Dev-ShareResources:ExportsOutputRefHinagikuDevAlarmSNSTopic2D377A7AE4E88178"
+        },
+        "SourceType": "db-instance",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Dev"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/RdsEventsInstances"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/31P227CMAz9Ft6DB+0XcJkmJB5Qu3fkBi8LtAmyHRCq+u9T2w0xNO3p+Fzi42Qwz3KYTfAqU3s4TWtfQVsq2pPBq+xbPgi0O2RsSInfOKazWX2E9XJVJ1Hiv6wnbY2KFQp9vzBlqgLpQ/5R+AmXZJn0V9VINkEUg6WevV4oaJkqsezP6mPoDNkM2pJsYq+3e8f/wiY4JpHOyFAqDQZ0xNCOwf6OEd6RHelCFe1nQ0HNPfDsdKaOTmAbXUFKob/NSL5HEVKBRQ9GclgmeyJdopDx2EBbxHr42IC7WHt76+k4dd1gkcTElsx9GLaVis4H15kQDwRHeblkM5jPYTY5ivdTTkF9Q1CM+AUq5K8M9gEAAA=="
+      },
+      "Metadata": {
+        "aws:cdk:path": "Hinagiku-Dev-Aurora/CDKMetadata/Default"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  ["1", "2", "3", "4", "5"],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}
