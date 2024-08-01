@@ -8,3 +8,9 @@ jobs :
         -name:step1
         run: echo hello world
 # jobs: 꼭실행되어야하는 job집합
+        -name: step2
+        run: |  
+# 이 바가있으면 멀티라인 가능
+        echo hello world
+        echo gihub action
+        
