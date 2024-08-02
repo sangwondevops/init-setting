@@ -10,5 +10,5 @@ jobs:
     - name: step2-test2
       run: |
         echo hello world
-        echo github action(test)
+        echo github action-test
     
