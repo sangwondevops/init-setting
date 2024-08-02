@@ -1,0 +1,9 @@
+name: push-workflow(test)
+on: push
+
+  jobs:
+    push-job:
+      runs-on: buntu-latest
+      steps:
+      - name: step1
+        run: echo hello world
