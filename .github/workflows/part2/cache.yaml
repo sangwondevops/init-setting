@@ -1,0 +1,31 @@
+name: cache
+on: 
+  push:
+    paths:
+      - 'my-app/**' #별표 두개는 myapp 아래모든걸 포함한다는의미
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4 #체크아웃 하기위한 액션
+      - name: setup-node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with: #with를 사용해서 path,key,restore-key 를  input값으로 전달한다
+          path: ~/.npm #캐싱할 경로
+          key: ${{ runner.os }}-node- 
+          restore-keys: |
+            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name : Install dependencies
+        run: |
+          cd my-app
+          npm ci
+      - name: npm build
+        run: |
+          cd my-app
+          npm run build

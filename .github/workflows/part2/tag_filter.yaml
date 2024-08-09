@@ -1,0 +1,12 @@
+name: tag_filter
+on: 
+  push:
+    tags:
+      - 'v[0-9]+.[0-9].[0-9]+' #v1.0.0 or v2.2.2 이런식으로 만 푸시해야 트리거됨
+
+jobs:
+  tag_filter:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo hello

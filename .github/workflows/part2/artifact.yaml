@@ -1,0 +1,25 @@
+name: artifact
+on: push
+
+jobs:
+  upload-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo hello-world > hello.txt #텍스트 파일안에 문자열이들어가게
+      - name: upload-artifact
+        uses: actions/upload-artifact@v3 #아티팩트 업로드
+        with:
+          name: artifact-test #아티팩트이름
+          path: ./hello.txt #아티팩트할 파일의 경로
+  download-artifact:
+    runs-on: ubuntu-latest
+    needs: [upload-artifact]
+    steps:
+    - name: download-artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: artifact-test
+        path: ./
+    - name: check
+      run: cat hello.txt

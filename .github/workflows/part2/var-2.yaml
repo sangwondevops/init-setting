@@ -1,0 +1,9 @@
+name: var-2
+on: push
+#레파지토리 setting에들어가서 secrets and variables에서variable 추가하면 이렇게 바로쓸수있ㅇ므
+jobs:
+  get-var:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get var
+        run: echo ${{ vars.level }}

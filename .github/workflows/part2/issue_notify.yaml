@@ -1,0 +1,28 @@
+name: issue-notify
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  get-keyword:
+    runs-on: ubuntu-latest
+    outputs:
+      level: ${{ steps.get-keyword.outputs.level }}
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4 #checkout 액션을 사용하면 github repo코드를  github job으로 가져올수있음
+    - name: get keyword
+      id: get-keyword
+      run: |
+        echo level=Undefined >> $GITHUB_OUTPUT
+
+        keywords=$(cat keyword-list.txt)
+        for keyword in $keywords; do
+          if [[ "${{ github.event.issue.title }}" =~ "$keyword" ]]; then
+            echo level=$keyword >> $GITHUB_OUTPUT
+
+            fi
+          done
+    - name: get output
+      run: |
+        echo ${{ steps.get-keyword.outputs.level }}
