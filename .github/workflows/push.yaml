@@ -5,5 +5,9 @@ jobs:
   push-job: 
     runs-on: ubuntu-latest
     steps:
-    - name: ste1
+    - name: step1
       run: echo hello world
+    - name: step2
+      run: | 
+        echo hello world
+        echo github action
