@@ -1,5 +1,7 @@
-name: pull-request-workflow
-on: pull_request
+name: pull-request-workflow from pr-branch another change 2222
+on:
+  pull_request:
+    types: [opened]
 
 jobs:
   pull-request-job:
