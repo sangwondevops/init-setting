@@ -4,7 +4,7 @@ on:
     types: [opened]
 
 jobs:
-  pull-request-job:
+  issue-job:
     runs-on: ubuntu-latest
     steps:
       - name: step1
