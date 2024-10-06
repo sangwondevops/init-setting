@@ -1,0 +1,29 @@
+name: workflow-dispatch-workflow
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "set name"
+        required: true
+        default: "default"
+        type: string
+      environment:
+        description: "set env"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+
+jobs:
+  workflow-dispatch-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: workflow dispatch
+        run: echo "This is a workflow dispatch"
+      - name: print inputs
+        run: |
+          echo inputs name : ${{ inputs.name }}  
+          echo inputs environment : ${{ inputs.environment }}
