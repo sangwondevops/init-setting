@@ -17,8 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: this job must be failed
-        run: echo "job must be failed"
-        exit 1
+        run: |
+          echo "job must be failed"
+          exit 1
+
   this-job-needs-job2:
     runs-on: ubuntu-latest
     needs: [job2]
