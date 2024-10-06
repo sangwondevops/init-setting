@@ -1,0 +1,31 @@
+name: multiple-event-workflow
+on:
+  push:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "set name"
+        required: true
+        default: "default"
+        type: string
+      environment:
+        description: "set env"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+jobs:
+  multiple-event-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: multiple event
+        run: echo "This is a multiple event"
+      - name: print inputs
+        run: |
+          echo inputs name : ${{ inputs.name }}  
+          echo inputs environment : ${{ inputs.environment }}
