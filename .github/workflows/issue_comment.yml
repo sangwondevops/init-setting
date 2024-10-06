@@ -1,0 +1,17 @@
+name: issue-comment-workflow
+on: issue_comment
+
+jobs:
+  pr-comment-job:
+    if: ${{ github.event.issue.pull_request}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: pull request comment
+        run: echo "This is a pull request comment"
+
+  issue-comment-job:
+    if: ${{ !github.event.issue.pull_request}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: issue comment
+        run: echo "This is an issue comment"
