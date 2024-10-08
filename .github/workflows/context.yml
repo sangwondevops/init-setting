@@ -7,3 +7,7 @@ jobs:
     steps:
       - name: github context
         run: echo '${{ toJson(github) }}'
+      - name: github repository name
+        run: echo '${{ toJson(github.repository) }}'
+      - name: github repository owner
+        run: echo '${{ toJson(github.repository_owner) }}'
