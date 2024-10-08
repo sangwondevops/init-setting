@@ -1,5 +1,5 @@
 name: checkout-workflow
-on: workflow-dispatch
+on: workflow_dispatch
 
 jobs:
   no-checkout:
