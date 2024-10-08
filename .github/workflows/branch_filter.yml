@@ -1,0 +1,11 @@
+name: branch-filter-workflow
+on:
+  push:
+    branches: ["dev"]
+
+jobs:
+  branch-filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: dev branch filter
+        run: echo "This job will run only when the branch is dev"
