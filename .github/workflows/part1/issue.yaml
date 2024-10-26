@@ -4,7 +4,7 @@ on:
     types: [opened]
   
 jobs: 
-    issue-job: 
+    issue-job: # 디폴트 브랜치에서만 트리거됨
         runs-on: ubuntu-latest 
         steps: 
         - name: step1 
