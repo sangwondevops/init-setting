@@ -1,4 +1,4 @@
-name: pull-request-workflow
+name: pull-request-workflow 1
 on: 
   pull_request: 
     types: [opened] # pull_request가 생성된 시점에만 업데이트 해주고 싶을때
