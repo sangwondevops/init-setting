@@ -1,0 +1,15 @@
+name: issue-workflow
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  issue-job:
+    runs-on: ubutu-latest
+    steps:
+    - name: step1
+      run: echo hello world
+    - name: step2
+      run: | # 다음 들여쓰기 내용 전부 포함
+        echo hello world
+        echo github action
