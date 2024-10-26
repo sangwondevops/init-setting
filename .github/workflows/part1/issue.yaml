@@ -1,6 +1,6 @@
 name: issue-workflow
 on:
-  issues:
+  issues: # default branch에 해당 파일이 있어야 동작함
     types: [opened]
 
 jobs:
