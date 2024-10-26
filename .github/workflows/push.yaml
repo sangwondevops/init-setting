@@ -7,3 +7,7 @@ jobs: # 실행시킬 job의 집합 (필수값)
         steps: # step의 집합
         - name: step1 # step의 이름 (생략가능)
           run: echo hello world
+        - name: step2
+          run: | # | 사용시 멀티라인 커멘드 사용가능
+            echo hello world
+            echo github action
