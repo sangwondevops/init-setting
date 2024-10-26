@@ -1,0 +1,33 @@
+name: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'set name'
+        required: true
+        default: 'github-action'
+        type: string
+      environment:
+        description: 'set env'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+
+jobs:
+  workflow-dispatch-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1 echo hello world
+        run: echo Hello, world!
+      - name: step2 echo github action
+        run: |
+          echo Hello, world!
+          echo github action !
+      - name: echo inputs
+        run: |
+          echo "NAME: ${{ inputs.name }}"
+          echo "Environment: ${{ inputs.environment }}"
