@@ -1,5 +1,7 @@
 name: pull-request-workflow
-on: pull_request
+on: 
+  pull_request: 
+    types: [opened] # pull_request가 생성된 시점에만 업데이트 해주고 싶을때
 
 jobs: 
     pull-request-job: 
