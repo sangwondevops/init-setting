@@ -25,6 +25,7 @@ jobs:
 
   job4:
     runs-on: ubuntu-latest
+    needs: [job3]
     steps:
     - name: echo
       run: |

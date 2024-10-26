@@ -1,0 +1,17 @@
+name: checkout
+on: workflow_dispatch
+
+jobs:
+  no-checout:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check file list
+      run: cat README.md
+
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+    - name: use checkout action
+      uses: actions/checkout@v4  #checkout action을 하면 github repository를 가져옴
+    - name: check file list
+      run: cat README.md
