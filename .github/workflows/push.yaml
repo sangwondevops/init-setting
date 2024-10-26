@@ -1,0 +1,9 @@
+name: push-workflow # 액션창에서 표현될 명칭 (생략가능)
+on: push #어떤 이벤트로 인해 깃허브액션을 트리거 시킬지
+
+jobs: # 실행시킬 job의 집합 (필수값)
+    push-job: 
+        runs-on: ubuntu-latest #job 안에 실행시킬 runner 지정
+        steps: # step의 집합
+        - name: step1 # step의 이름 (생략가능)
+          run: echo hello world
