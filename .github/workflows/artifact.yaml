@@ -20,7 +20,7 @@ jobs:
     - name: download arifact
       uses: actions/download-artifact@v3
       with:
-        name: artiact-test
+        name: artifact-test
         path: ./
     - name: check
       run: cat hello.txt
