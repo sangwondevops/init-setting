@@ -1,0 +1,17 @@
+name: debug
+on: [push]
+
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: force fail
+      run: |
+        cat test.txt 
+    - name: uses tmate
+      if: always()
+      uses: mxschmitt/action-tmate@v3
+      timeout-minutes: 15

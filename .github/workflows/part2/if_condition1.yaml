@@ -1,0 +1,29 @@
+name: if-condition
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  job1: # job레벨 조건1
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+    - name: get event name
+      run: echo ${{ github.event_name }}
+
+  job2: # job레벨 조건2
+    runs-on: ubuntu-latest
+    if: github.event_name != 'push'
+    steps:
+    - name: get event name
+      run: echo ${{ github.event_name }}
+
+  job3: # step레벨 조건
+    runs-on: ubuntu-latest
+    steps:
+    - name: get event name
+      if: github.event_name == 'push'
+      run: echo ${{ github.event_name }}
+    - name: get event name
+      if: github.event_name != 'push'
+      run: echo ${{ github.event_name }}

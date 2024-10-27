@@ -1,0 +1,28 @@
+name: output
+on: push
+
+jobs:
+  create-output:
+    runs-on: ubuntu-latest
+    outputs: # job level output
+      test: ${{ steps.check-output.outputs.test }}
+    steps:
+      - name: echo output
+        id: check-output
+        run: echo "test=hello" >> "$GITHUB_OUTPUT"
+      - name: echo output
+        id: check-output2
+        run: | #step level output
+          echo "test=hello2" >> "$GITHUB_OUTPUT"
+      - name: check output
+        run: |
+          echo ${{ steps.check-output.outputs.test }}
+          echo ${{ steps.check-output2.outputs.test }}
+
+  get-output:
+    needs: [create-output]
+    runs-on: ubuntu-latest
+    steps:
+    - name: get output
+      run: | # needs에서 가져온걸 표기
+        echo ${{ needs.create-output.outputs.test }} 

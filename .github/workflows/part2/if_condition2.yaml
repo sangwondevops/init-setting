@@ -1,0 +1,20 @@
+name: if-condition2
+on: push
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+    - name: exit1 # 강제종료
+      run: exit1
+    - name: echo
+      if: always() # 원래 강제종료되는거 실행되도록 변경
+      run: echo hello
+
+  job2:
+    needs: [job1]
+    runs-on: ubuntu-latest
+    if: always() # 원래 강제종료되는거 실행되도록 변경
+    steps:
+    - name: echo
+      run: echo hello

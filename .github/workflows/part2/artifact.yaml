@@ -1,0 +1,27 @@
+name: artifact #workflow job 사이에 데이터 공유를 위함
+on: push
+
+jobs:
+  upload-artifact:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo hello-world > hello.txt # txt안에 hello-world 넣기
+    - name: upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifact-test  # 임시 저장을 artifact-test로 네이밍 하고 해당 위치에 아래 txt저장
+        path: ./hello.txt
+
+
+  download-artifact:
+    runs-on: ubuntu-latest
+    needs: [upload-artifact]
+    steps:
+    - name: download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: artifact-test # 특정 artigact-test 에 위치로 이동
+        path: ./            # 다운로드한 artifact를 root 에 저장
+    - name: check
+      run: cat hello.txt
