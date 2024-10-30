@@ -16,7 +16,8 @@ on:
         required: true
         default: 'github-actions'
         type: string
-
+env:
+  GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 jobs:
   create-repo-automation:
     runs-on: ubuntu-latest
