@@ -1,0 +1,11 @@
+name: environment
+on: push
+
+jobs: 
+  get-env: 
+    runs-on: ubuntu-latest
+    steps:
+    - name: check env & secret
+      run: |
+        echo ${{ vars.level }}
+        echo ${{ secrets.key }}
