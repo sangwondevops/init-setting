@@ -1,7 +1,6 @@
 name: debug
 on: [push]
 
-
 jobs:
   debug:
     runs-on: ubuntu-latest
