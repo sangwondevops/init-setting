@@ -25,4 +25,4 @@ jobs:
         echo "${{ secrets.PERSONAL_ACCESS_TOKEN }}" | gh auth login --with-token
     - name: create-repo
       run: |
-        gh repo create sangwon-action/${{ inputs.prefix }}-${{inputs.name}} --public --add-readme
+        gh repo create koosang-action/${{ inputs.prefix }}-${{inputs.name}} --public --add-readme
