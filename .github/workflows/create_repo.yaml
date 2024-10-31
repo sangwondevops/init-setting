@@ -1,13 +1,13 @@
 name: create-repo
-on: 
-  workflow-dispatch:
+on:
+  workflow_dispatch:
     inputs:
       prefix:
         description: 'set repo prefix'
         required: true
         default: 'service'
         type: choice
-        options: 
+        options:
         - example
         - service
       name:
@@ -16,7 +16,7 @@ on:
         default: 'github-actions'
         type: string
 
-jpbs:
+jobs:
   create-repo-automation:
     runs-on: ubuntu-latest
     steps:
@@ -25,4 +25,4 @@ jpbs:
         echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} | gh auth login --with-token
     - name: create-repo
       run: |
-        gh repo create heesun-action/${{ inputs.prefix }}-${{ inputs.name }} --public --add-readme
+        gh repo create sangwon-action/${{ inputs.prefix }}-${{ inputs.name }} --public --add-readme
