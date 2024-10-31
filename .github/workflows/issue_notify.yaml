@@ -40,14 +40,13 @@ jobs:
           {
             "attachments": [
               {
-                "pretext": "issue alert message"
-                "color": "28a745"
+                "pretext": "issue alert message",
+                "color": "28a745",
                 "fields": [
                   {
-                    "title": "Level : ${{ needs.getkeyword.outputs.level }}",
+                    "title": "Level : ${{ needs.get-keyword.outputs.level }}",
                     "short": true,
                     "value": "issue url : ${{ github.event.issue.html_url }}"
-
                   }
                 ]
               }
@@ -55,4 +54,4 @@ jobs:
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMINZG_WEBHOOK
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
