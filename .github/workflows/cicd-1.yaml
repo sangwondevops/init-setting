@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        run: actions/checkout@v4
+        uses: actions/checkout@v4
 
   deploy:
     runs-on: ubuntu-latest
     needs: [image-build]
     steps:
       - name: checkout
-        run: actions/checkout@v4
+        uses: actions/checkout@v4
