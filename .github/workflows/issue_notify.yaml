@@ -34,8 +34,8 @@ jobs:
     # environment: ${{ needs.get-keyword.outputs.level }}
     strategy:
       matrix: # 어떤 환경을 사용했는지 파악 가능
-        environment: [${{ needs.get-keyword.outputs.level }}]
-      environment: ${{ matrix.environment }}
+        environment: ["${{ needs.get-keyword.outputs.level }}"]
+    environment: ${{ matrix.environment }}
     steps:
     - name: slack
       uses: slackapi/slack-github-action@v1.24.0
