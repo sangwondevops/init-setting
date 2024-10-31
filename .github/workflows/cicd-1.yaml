@@ -1,0 +1,29 @@
+name: my-app pull-request
+on:
+  pull_request:
+    types: [opened, synchronize, closed] #closed를 포함해야 merge시 동작
+    branches: [dev]
+    paths:
+      - "my-app/**"
+
+jobs:
+  test:
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+  image-build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        run: actions/checkout@v4
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [image-build]
+    steps:
+      - name: checkout
+        run: actions/checkout@v4
