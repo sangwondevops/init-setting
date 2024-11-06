@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd my-app
-          npm cli
+          npm i
       - name: npm build
         run: |
           cd my-app
