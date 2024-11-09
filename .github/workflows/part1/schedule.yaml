@@ -1,0 +1,11 @@
+name: schedule-workflow
+on: 
+  schedule:
+  - cron: '15 * * * *'
+
+  jobs:
+    schedule-job: 
+        runs-on: ubuntu-latest
+        steps: 
+        - name: schedule test
+          run: echo hello world

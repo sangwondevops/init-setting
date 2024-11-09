@@ -1,0 +1,19 @@
+name: timeout
+on: push
+
+jobs:
+  timeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+    - name: loop
+      run: |
+        count=0
+        while true; do
+          echo "seconds: $count"
+          count=$((count+1))
+          sleep 1
+        done
+      timeout-minutes: 1
+    - name: echo
+      run: echo hello

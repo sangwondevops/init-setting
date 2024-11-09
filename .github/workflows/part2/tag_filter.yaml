@@ -1,0 +1,12 @@
+name: tag-filter # push 이벤트에서만 사용 가능
+on: 
+  push:
+    tags: 
+    - 'v[0-9]+.[0-9]+.[0-9]+' # v1.0.0의 패턴
+
+jobs:
+  tag-filter:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo hello

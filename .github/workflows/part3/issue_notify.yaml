@@ -1,0 +1,61 @@
+name: issue-notify
+
+on: 
+  issues:
+    types: [opened]
+
+jobs:
+  get-keyword:
+    runs-on: ubuntu-latest
+    outputs:
+      level: ${{ steps.get-keyword.outputs.level }}
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: get keyword
+      id: get-keyword
+      run: |
+        echo level=Undefined >> $GITHUB_OUTPUT
+
+        keywords=$(cat keyword-list.txt)
+        for keyword in $keywords; do
+          if [[ "${{ github.event.issue.title }}" =~ "$keyword" ]]; then
+            echo level=$keyword >> $GITHUB_OUTPUT
+          fi
+        done
+    - name: get output
+      run: |
+        echo ${{ steps.get-keyword.outputs.level }}
+
+  slack:
+    needs: [get-keyword]
+    if: needs.get-keyword.outputs.level != 'Undefined'
+    runs-on: ubuntu-latest
+    # environment: ${{ needs.get-keyword.outputs.level }}
+    strategy:
+      matrix: # 어떤 환경을 사용했는지 파악 가능
+        environment: ["${{ needs.get-keyword.outputs.level }}"]
+    environment: ${{ matrix.environment }}
+    steps:
+    - name: slack
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "attachments": [
+              {
+                "pretext": "issue alert message",
+                "color": "28a745",
+                "fields": [
+                  {
+                    "title": "Level : ${{ needs.get-keyword.outputs.level }}",
+                    "short": true,
+                    "value": "issue url : ${{ github.event.issue.html_url }}"
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

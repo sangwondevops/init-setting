@@ -1,0 +1,23 @@
+name: output
+on: push
+
+jobs:
+  create-output:
+    runs-on: ubuntu-latest
+    outputs:
+      test: ${{ steps.check-output.outputs.test }}
+    steps:
+    - name: echo output
+      id: check-output
+      run: |
+        echo "test=hello" >> $GITHUB_OUTPUT
+    - name: check output
+      run: |
+        echo ${{ steps.check-output.outputs.test }}
+  
+  get-output:
+    needs: [create-output]
+    runs-on: ubuntu-latest
+    steps:
+    - name: get output
+      run: echo ${{ needs.create-output.outputs.test }}
