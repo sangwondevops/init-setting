@@ -2,7 +2,7 @@ name: cicd-1
 on: 
   pull_request:
     type: [opened, synchronize, closed] # close를 정의해야 merge될 때 동작제어 가능
-    brahches: [dev]
+    branches: [dev]
     paths:
     - 'my-app/**'
 
