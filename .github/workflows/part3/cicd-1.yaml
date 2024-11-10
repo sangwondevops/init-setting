@@ -25,9 +25,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: |
+        run: | # npm ci는 package-lock.json에 지정된 정확한 버전을 설치한다.(package-lock.json고정)
           cd my-app
-          npm i
+          npm ci
       - name: npm build
         run: |
           cd my-app
@@ -60,7 +60,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [image-build]
-    permissions:
+    permissions: # aws oidc설정을 위해 permission 정의
       id-token: write
       contents: read
     steps:
