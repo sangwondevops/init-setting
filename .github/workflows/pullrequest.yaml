@@ -1,0 +1,15 @@
+name: pull-request-workflow
+on: pull_request
+
+jobs:
+    pull-request-job:
+        runs-on: ubuntu-latest
+        steps:
+            - name: step1
+              run: |
+                echo step1 pull-request
+                echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
+            - name: step2
+              run: |
+                echo hello step2
+                echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
