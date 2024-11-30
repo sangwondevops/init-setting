@@ -1,0 +1,29 @@
+name: needs
+on: push
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo love scl
+  job2:
+    runs-on: ubuntu-latest
+    needs: [job1]
+    steps:
+      - name: step1
+        run: echo after job1
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: |
+          echo love scl
+          exit 1
+
+  job4:
+    runs-on: ubuntu-latest
+    needs: [ job3 ]
+    steps:
+      - name: step1
+        run: echo after job1
