@@ -11,3 +11,4 @@ jobs:
       run: |
         echo hello world
         echo github action
+        echo directory move
