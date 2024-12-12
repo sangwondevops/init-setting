@@ -1,4 +1,4 @@
-name: push-workflow
+name: push-workflow 1
 on: push # push 이벤트 의해서 workflow를 트리거 하겠다
 
 jobs:
