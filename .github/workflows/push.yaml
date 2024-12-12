@@ -7,5 +7,7 @@ jobs:
     steps: # step의 집합 : 여기에서 job이 실행시킬 step을 정의
     - name: step1 # 첫번째 step의 이름, 각 step 마다 name을 명시적으로 작성해도 되고 생략해도 됨
       run: echo hello world # 이 workflow는 push 이벤트가 발생할 때 트리거가 돼서 push-job 이라는 job이 실행됨, 첫번째 스텝의 echo hello world를 출력하고 종료됨.
-      
-      
+    - name: step2
+      run: | # 멀티라인 커맨드를 사용하기 위해서는 "|" 사용
+        echo hello world
+        echo github action
