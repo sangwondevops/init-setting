@@ -11,6 +11,7 @@ jobs:
         run: echo hello
 
   job2:
+    if: always()
     needs: [job1]
     runs-on: ubuntu-latest
     steps:
