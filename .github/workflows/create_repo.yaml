@@ -41,7 +41,7 @@ jobs:
                   "fields":[
                     {
                       "title": "create repo result ${{steps.create-repo.outcome}}",
-                      "value": "{{inputs.prefix}}-{{inputs.name}}",
+                      "value": "${{inputs.prefix}}-${{inputs.name}}",
                       "short": true
                     }
                   ]
