@@ -11,3 +11,5 @@ jobs:
      run: |
       echo hello world
       echo github action
+    -name: step3
+     run: echo hiyo
