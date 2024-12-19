@@ -1,0 +1,28 @@
+name: if-1
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: step1
+        run: echo hello world
+  job2:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'push'
+    steps:
+      - name: step1
+        run: echo hello world
+
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo PUSH
+        if: github.event_name == 'push'
+        run: echo PUSH
+      - name: echo WORKFLOW_DISPATCH
+        if: github.event_name != 'push'
+        run: echo WORKFLOW_DISPATCH

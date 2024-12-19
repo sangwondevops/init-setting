@@ -1,0 +1,10 @@
+name: string-function
+on: push
+
+jobs:
+  string-function:
+    runs-on: ubuntu-latest
+    steps:
+      - name: startswith
+        if: startsWith('github actions','git')
+        run: echo "The string starts with 'git'"

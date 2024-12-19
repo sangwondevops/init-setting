@@ -1,0 +1,21 @@
+name: timeout
+on: push
+
+jobs:
+  timeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: step1
+        run: |
+          count=0
+          while true; do
+              echo "Hello $count"
+              count=$((count+1))
+              sleep 1
+          done
+        timeout-minutes: 1
+      - name: step2
+        run: |
+          echo hello world
+          echo ${{ github.repository }}
