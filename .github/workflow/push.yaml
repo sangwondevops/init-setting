@@ -1,0 +1,13 @@
+name: push-workflow # GitHub Actions 탭에서 표시될 workflow의 이름
+on: push # push event가 발생할때 아래 작업을 진행한다.
+
+jobs: # 실제 동작할 작업으로 job들의 집합, 꼭 들어가야하는 키워드
+  push-job: # 이 job 이름으로 실행
+    runs-on: ubuntu-latest # 해당 job이 ubuntu에서 동작한다.
+    steps: # 순차적으로 실행될 작업들의 집합
+      - name: step1 # 각 step의 이름으로, GitHub Actions 실행 로그에서 이 이름으로 구분
+        run: echo hello world # 실제 실행할 명령어
+      - name: step2
+        run: |
+          echo hello github
+          echo github action
