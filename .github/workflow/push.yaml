@@ -10,4 +10,4 @@ jobs: # 실제 동작할 작업으로 job들의 집합, 꼭 들어가야하는 �
       - name: step2
         run: |
           echo hello github
-          echo github action
+          echo github action2
