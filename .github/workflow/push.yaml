@@ -1,0 +1,9 @@
+name: push-workflow
+on: push # push event가 발생할때 아래 작업을 진행한다.
+
+jobs: # 실제 동작할 작업으로 job들의 집합, 꼭 들어가야하는 키워드
+  push-job: # job 이름
+    runs-on: ubuntu-latest # 해당 job이 ubuntu에서 동작한다.
+    steps: # step의 집합
+      - name: step1
+        run: echo hello world
