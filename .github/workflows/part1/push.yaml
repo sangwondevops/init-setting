@@ -1,4 +1,4 @@
-name: push-workflow
+name: push-workflow test
 on: push # push이벤트에 의해서 워크플로우를 트리거함
 
 jobs:
