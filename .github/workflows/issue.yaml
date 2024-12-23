@@ -1,8 +1,10 @@
-name: push-workflow test test2
-on: push # push이벤트에 의해서 워크플로우를 트리거함
+name: issue-workflow
+on:
+  issues:
+    types: [opened]
 
 jobs:
-  push-job:
+  issue-job:
     runs-on: ubuntu-latest
     steps:
       - name: step1
@@ -10,4 +12,4 @@ jobs:
       - name: step2
         run: |
           echo hello world
-          echo github actions
+          echo github action
