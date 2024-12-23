@@ -2,28 +2,111 @@ name: cicd-1
 on:
   pull_request:
     types: [opened, synchronize, closed]
-    branches:
-      - dev
+    branches: [dev]
     paths:
-      - 'my-app/**'
+    - 'my-app/**'
+
 jobs:
   test:
-    if: github.event.action == "opened" || github.event.action == "synchronize"
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-  
+    - name: checkout the code
+      uses: actions/checkout@v4
+    - name: setup-node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: Cache Node.js modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install dependencies
+      run: |
+        cd my-app
+        npm ci
+    - name: npm build
+      run: |
+        cd my-app
+        npm run build
+
   image-build:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: checkout the code
+      uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      id: credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        mask-password: 'true'
+    - name: docker build & push
+      run: |
+        docker build -f Dockerfile --tag ${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}:${{ github.sha }} .
+        docker push ${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}:${{ github.sha }}
   
   deploy:
     runs-on: ubuntu-latest
-    needs: [image-build]
+    needs: [ image-build ]
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: checkout the code
+      uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      id: credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+    - name: setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: latest
+    - name: setup helm
+      uses: azure/setup-helm@v3
+      with:
+        version: v3.11.1
+    - name: access kubernetes
+      run: |
+        aws eks update-kubeconfig --name ${{ vars.CLUSTER_NAME }}
+    - name: deploy
+      id: status
+      run: |
+        helm upgrade --install my-app kubernetes/my-app --create-namespace --namespace my-app-${{ vars.SUFFIX }} \
+        --set image.tag=${{ github.sha }} \
+        --set image.repository=${{ secrets.REGISTRY }}/${{ vars.REPOSITORY }}
+    - name: notify
+      if: always()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "message",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Environment : dev, Deploy Result : ${{ steps.status.outcome }}, Repository : ${{ github.repository }}."
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
