@@ -1,4 +1,4 @@
-name: push-workflow2
+name: push-workflow
 on: push
 
 jobs:
@@ -7,7 +7,3 @@ jobs:
     steps:
     - name: step1
       run: echo hello world
-    -name: step2
-     run: echo hello world
-    -name: step3
-     run: echo hiyo
