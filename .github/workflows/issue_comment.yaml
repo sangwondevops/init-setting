@@ -1,0 +1,17 @@
+name: issue-commnet-workflow
+on: issue_commnet
+
+job:
+  pr-commnet:
+    if: ${{github.event.issue.pull_request}}
+    runs-on: ubuntu-lastest
+    steps:
+    - name: pr comment
+      run: echo ${{github.event.issue.pull_request}}
+
+    issue-commnet:
+    if: ${{github.event.issue.pull_request}}
+    runs-on: ubuntu-lastest
+    steps:
+    - name: issue comment
+      run: echo ${{github.event.issue.pull_request}}
