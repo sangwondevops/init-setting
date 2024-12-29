@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          cicd test1
+          cicd test2
         </a>
       </header>
     </div>
