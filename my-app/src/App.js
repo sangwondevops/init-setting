@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          cache test
+          cicd test2
         </a>
       </header>
     </div>
