@@ -2,7 +2,7 @@ name: multiple-event-workflow
 on:
   push:
   issues:
-    types: [opened]
+    types: [opened] # 다시 공부해야하나
   workflow_dispatch:
     inputs:
       name:
