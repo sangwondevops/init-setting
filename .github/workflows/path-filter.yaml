@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - ".github/workflows/part1/*" # paths에 변경사항이 있을 경우에만 동작하는 이벤트
+      - "!.github/workflows/part1/push.yaml"
 
 jobs:
   path-filter:
