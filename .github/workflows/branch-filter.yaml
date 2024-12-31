@@ -1,7 +1,7 @@
 name: branch-filter
 on:
-  push:
-    branches: ["dev"]
+  push: # push 이벤트가
+    branches: ["dev"] # dev 에서 일어날 때 일어나는 워크플로우
 
 jobs:
   branch-filter:
