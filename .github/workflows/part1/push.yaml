@@ -1,5 +1,5 @@
 name: push-workflow test test2
-on: push # push이벤트에 의해서 워크플로우를 트리거함
+on: push # push 이벤트에 의해서 워크플로우를 트리거함
 
 jobs:
   push-job:
