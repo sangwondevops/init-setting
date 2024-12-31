@@ -1,7 +1,7 @@
 name: issue-workflow
 on:
   issues:
-    types: [opened]
+    types: [opened] # 이슈가 열렸을 때 동작함
 
 jobs:
   issue-job:
