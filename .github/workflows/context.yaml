@@ -7,3 +7,7 @@ jobs:
     steps:
       - name: github context
         run: echo '${{ toJSON(github) }}' # 컨텍스트는 객체라 toJSON으로 변환할 수 있음
+      - name: check github context
+        run: |
+          echo ${{ github.repository }}
+          echo ${{ github.event_name }}
