@@ -1,0 +1,20 @@
+name: if-2
+on: push
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: exit 1
+        run: exit 1
+      - name: echo
+        if: always()
+        run: echo hello
+
+  job2:
+    if: always()
+    needs: [job1]
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo hello
