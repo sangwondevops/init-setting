@@ -1,9 +1,13 @@
-name: push-workflow
-on: push
+name: push-workflow # 워크플로우 이름
+on: push # push 이벤트 발생 시 실행
 
 jobs:
-  push-jobs:
-    runs-on: ubuntu-latest
+  push-jobs: # 작업 이름
+    runs-on: ubuntu-latest # 실행 환경 설정
     steps:
-    - name: step1
-      run: echo hello world
+    - name: step1 # 첫 번째 단계 이름
+      run: echo hello world # 첫 번째 단계에서 실행할 명령어
+    - name: step2 # 두 번째 단계 이름
+      run: | #작대를 넣으면 멀티라인의 커맨드를 쉽게 작성할 수 있음.
+        echo hello world
+        echo github action
