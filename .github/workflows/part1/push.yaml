@@ -1,4 +1,4 @@
-name: push-workflow # 워크플로우 이름
+name: push-workflow 1 # 워크플로우 이름
 on: push # push 이벤트 발생 시 실행
 
 jobs:
