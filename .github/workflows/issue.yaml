@@ -3,14 +3,14 @@ on:
   issues:
     types: [opened]
 
-  jobs:
-    issue-job:
-      runs-on: ubuntu-latest
-      steps:
-      - name: step1
-        run: echo hello world
-      - name: step2
-        run: |
-          echo hello world
-          echo github action
+jobs:
+  issue-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: step1
+      run: echo hello world
+    - name: step2
+      run: |
+        echo hello world
+        echo github action
   
