@@ -1,0 +1,15 @@
+name: issue-workflow
+on:
+  issues:
+    types: [opened] # 이슈가 열렸을 때 동작함
+
+jobs:
+  issue-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo hello world
+      - name: step2
+        run: |
+          echo hello world
+          echo github action

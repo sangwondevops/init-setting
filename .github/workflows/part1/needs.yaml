@@ -1,0 +1,37 @@
+# 깃헙 액션 job 간에 종속성을 생성
+# 하나의 job이 다른 job 또는 여러 job이 완료될 때 실행되도록 사용
+# 즉 여러 job의 실행 순서를 조절
+# 테스트 job이 실행되고, 그 job이 성공할 때 배포 job이 실행되도록 구성
+
+name: needs
+on: push
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo "job1 done"
+
+  job2:
+    runs-on: ubuntu-latest
+    needs: [job1]
+    steps:
+      - name: echo
+        run: echo "job1 done"
+
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: |
+          echo "job3 failed"
+          exit 1
+
+  job4:
+    runs-on: ubuntu-latest
+    needs: [job3]
+    steps:
+      - name: echo
+        run: |
+          echo "job4 done"
