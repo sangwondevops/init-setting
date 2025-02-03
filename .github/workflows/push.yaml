@@ -7,12 +7,9 @@ jobs:
     steps:
     - name: stpe1
       run: echo hello word
-    # - name
-    #   - name: Checkout
-    #     uses: actions/checkout@v2
-    #   - name: Run a one-line script
-    #     run: echo Hello, world!
-    #   - name: Run a multi-line script
-    #     run: |
-    #       echo Add other actions to build,
-    #       echo test, and deploy your project.
+    - name: step2
+      run: |
+        echo ${{ github.event_name }}
+        echo ${{ github.sha }}
+        echo ${{ github.ref }}
+        echo github action
