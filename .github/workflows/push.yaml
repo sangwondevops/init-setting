@@ -12,4 +12,4 @@ jobs:
         echo ${{ github.event_name }}
         echo ${{ github.sha }}
         echo ${{ github.ref }}
-        echo github action
+        echo "This is a GitHub Action"
