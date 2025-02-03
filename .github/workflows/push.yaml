@@ -1,0 +1,18 @@
+name: push-workflow
+on: push
+
+jobs:
+  push-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: stpe1
+      run: echo hello word
+    # - name
+    #   - name: Checkout
+    #     uses: actions/checkout@v2
+    #   - name: Run a one-line script
+    #     run: echo Hello, world!
+    #   - name: Run a multi-line script
+    #     run: |
+    #       echo Add other actions to build,
+    #       echo test, and deploy your project.
